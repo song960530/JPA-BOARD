@@ -15,7 +15,7 @@ import javax.persistence.MappedSuperclass;
 public class BaseEntity extends BaseTimeEntity {
 
     @CreatedBy
-    @Column(name = "RET_ID", updatable = false)
+    @Column(name = "REG_ID", updatable = false)
     private String reg_id;
 
     @LastModifiedBy

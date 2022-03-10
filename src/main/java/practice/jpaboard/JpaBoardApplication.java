@@ -19,6 +19,6 @@ public class JpaBoardApplication {
 
     @Bean
     public AuditorAware<String> auditorProvider() {
-        return () -> Optional.of(UUID.randomUUID().toString());
+        return () -> Optional.of("");
     }
 }

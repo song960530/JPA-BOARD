@@ -1,6 +1,22 @@
 spring:
+  profiles:
+    active: local
+
   datasource:
     url: jdbc:oracle:thin:@localhost:1521:xe
     username: board
     password: board
     driver-class-name: oracle.jdbc.driver.OracleDriver
+
+  jpa:
+    hibernate:
+      ddl-auto: create
+    properties:
+      hibernate:
+        # show_sql: true
+        format_sql: true
+        # use_sql_comments: true
+
+logging.level:
+  org.hibernate.SQL: debug
+  # org.hibernate.type: trace

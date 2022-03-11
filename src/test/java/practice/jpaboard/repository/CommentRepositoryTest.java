@@ -10,6 +10,8 @@ import practice.jpaboard.entity.Board;
 import practice.jpaboard.entity.Comment;
 import practice.jpaboard.entity.Member;
 
+import javax.persistence.EntityManager;
+import javax.persistence.PersistenceContext;
 import java.util.List;
 
 import static org.assertj.core.api.Assertions.assertThat;
@@ -27,6 +29,10 @@ class CommentRepositoryTest {
 
     @Autowired
     CommentRepository commentRepository;
+
+    @Autowired
+    EntityManager em;
+
 
     @Test
     @DisplayName("스프링데이터JPA 기본동작을 확인한다")
@@ -48,6 +54,5 @@ class CommentRepositoryTest {
         assertThat(commentList).extracting("member").containsOnly(member);
         assertThat(commentList).extracting("board").containsOnly(board);
         assertThat(commentList).extracting("content").containsOnly("content");
-        assertEquals(0,commentList.get(0).getParent());
     }
 }

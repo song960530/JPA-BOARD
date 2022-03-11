@@ -3,6 +3,8 @@ package practice.jpaboard.entity;
 import lombok.AccessLevel;
 import lombok.Getter;
 import lombok.NoArgsConstructor;
+import org.hibernate.annotations.DynamicInsert;
+import org.jetbrains.annotations.Contract;
 
 import javax.persistence.*;
 
@@ -15,6 +17,7 @@ import javax.persistence.*;
         , initialValue = 1
         , allocationSize = 1
 )
+@DynamicInsert
 @Table(name = "COMMENTS")
 public class Comment extends BaseEntity {
 
@@ -34,16 +37,14 @@ public class Comment extends BaseEntity {
     @ManyToOne(fetch = FetchType.LAZY)
     private Board board;
 
-    @Column(name = "PARENT")
+    @Column(
+            name = "PARENT"
+            , columnDefinition = "number default 0"
+    )
     private Long parent;
 
     @Column(name = "CONTENT")
     private String content;
-
-    @PrePersist
-    private void prePersist() {
-        this.parent = (this.parent == null ? 0 : this.parent);
-    }
 
     public Comment(Member member, Board board, String content) {
         this.member = member;

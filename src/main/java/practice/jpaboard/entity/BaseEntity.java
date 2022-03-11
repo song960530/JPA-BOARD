@@ -16,9 +16,9 @@ public class BaseEntity extends BaseTimeEntity {
 
     @CreatedBy
     @Column(name = "REG_ID", updatable = false)
-    private String reg_id;
+    private String regId;
 
     @LastModifiedBy
     @Column(name = "MODI_ID")
-    private String modi_id;
+    private String modiId;
 }

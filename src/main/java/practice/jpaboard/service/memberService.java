@@ -2,7 +2,7 @@ package practice.jpaboard.service;
 
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
-import org.springframework.security.crypto.password.PasswordEncoder;
+import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.jpaboard.common.config.ResultMessage;
@@ -17,7 +17,7 @@ import practice.jpaboard.repository.RoleRepository;
 @RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
-    private final PasswordEncoder passwordEncoder;
+    private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
@@ -39,7 +39,8 @@ public class MemberService {
 
 
     public ResultMessage login(LoginDTO loginDto) {
-        Member member = memberRepository.findByUserId(loginDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다"));
+        Member member = memberRepository.findByUserId(loginDto.getUserId())
+                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다"));
 
         if (!passwordEncoder.matches(loginDto.getPassword(), member.getPassword()))
             throw new IllegalArgumentException("패스워드가 맞지 않습니다");

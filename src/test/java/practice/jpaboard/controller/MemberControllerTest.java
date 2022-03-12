@@ -16,6 +16,7 @@ import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import practice.jpaboard.common.config.ResultMessage;
 import practice.jpaboard.dto.JoinDTO;
+import practice.jpaboard.dto.LoginDTO;
 import practice.jpaboard.service.MemberService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -49,8 +50,8 @@ class MemberControllerTest {
     }
 
     @Test
-    @DisplayName("회원가입 성공")
-    public void joinSuccess() throws Exception {
+    @DisplayName("회원가입 호출")
+    public void join() throws Exception {
         // given
         JoinDTO joinDTO = joinDTO();
         doReturn(ResultMessage.of(true, HttpStatus.OK)).when(memberService).join(any(JoinDTO.class));
@@ -60,6 +61,26 @@ class MemberControllerTest {
                 MockMvcRequestBuilders.post("/join")
                         .contentType(MediaType.APPLICATION_JSON)
                         .content(new Gson().toJson(joinDTO))
+        );
+
+        // then
+        String response = resultActions.andExpect(status().isOk()).andReturn().getResponse().getContentAsString();
+        ResultMessage resultMessage = new Gson().fromJson(response, ResultMessage.class);
+        assertEquals(true, resultMessage.isSuccess());
+        assertEquals(HttpStatus.OK, resultMessage.getStatusCode());
+    }
+
+    @Test
+    @DisplayName("로그인 호출")
+    public void login() throws Exception {
+        // given
+        doReturn(ResultMessage.of(true, null, HttpStatus.OK)).when(memberService).login(any(LoginDTO.class));
+
+        // when
+        ResultActions resultActions = mockMvc.perform(
+                MockMvcRequestBuilders.post("/login")
+                        .contentType(MediaType.APPLICATION_JSON)
+                        .content(new Gson().toJson(new LoginDTO()))
         );
 
         // then

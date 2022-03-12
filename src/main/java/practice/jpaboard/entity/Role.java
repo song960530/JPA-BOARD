@@ -34,4 +34,9 @@ public class Role {
             , inverseJoinColumns = @JoinColumn(name = "MEMBER_NO")
     )
     private List<Member> members;
+
+    public Role(Long no, String roles) {
+        this.no = no;
+        this.roles = roles;
+    }
 }

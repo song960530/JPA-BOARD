@@ -7,8 +7,8 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.jpaboard.common.config.ResultMessage;
 import practice.jpaboard.common.config.security.JwtTokenProvider;
-import practice.jpaboard.dto.JoinDto;
-import practice.jpaboard.dto.LoginDto;
+import practice.jpaboard.dto.JoinDTO;
+import practice.jpaboard.dto.LoginDTO;
 import practice.jpaboard.entity.Member;
 import practice.jpaboard.repository.MemberRepository;
 import practice.jpaboard.repository.RoleRepository;
@@ -23,7 +23,7 @@ public class MemberService {
     private final RoleRepository roleRepository;
 
     @Transactional
-    public ResultMessage join(JoinDto joinDto) {
+    public ResultMessage join(JoinDTO joinDto) {
 
         try {
             joinDto.setRole(roleRepository.findByRoles("ROLE_USER")); // 앞에 ROLE_은 시큐리티에서 default prefix로 정의해둔거라 꼭 붙여야함
@@ -38,7 +38,7 @@ public class MemberService {
     }
 
 
-    public ResultMessage login(LoginDto loginDto) {
+    public ResultMessage login(LoginDTO loginDto) {
         Member member = memberRepository.findByUserId(loginDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다"));
 
         if (!passwordEncoder.matches(loginDto.getPassword(), member.getPassword()))
@@ -47,6 +47,6 @@ public class MemberService {
         String token = jwtTokenProvider.createToken(member.getUserId(), member.getRoles());
 
 
-        return ResultMessage.of(true, new LoginDto(member, token), HttpStatus.OK);
+        return ResultMessage.of(true, new LoginDTO(member, token), HttpStatus.OK);
     }
 }

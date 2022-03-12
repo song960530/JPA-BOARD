@@ -1,6 +1,7 @@
 package practice.jpaboard.dto;
 
 import lombok.AllArgsConstructor;
+import lombok.Builder;
 import lombok.Data;
 import lombok.NoArgsConstructor;
 import practice.jpaboard.entity.Member;
@@ -9,9 +10,10 @@ import practice.jpaboard.entity.Role;
 import java.util.Arrays;
 
 @Data
+@Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JoinDto {
+public class JoinDTO {
     private String userId;
     private String password;
     private String encrytPassword;

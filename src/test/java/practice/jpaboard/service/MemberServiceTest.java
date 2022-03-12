@@ -1,13 +1,17 @@
 package practice.jpaboard.service;
 
+import org.junit.jupiter.api.Assertions;
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.mockito.InjectMocks;
 import org.mockito.Mock;
+import org.mockito.MockitoAnnotations;
 import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 import org.springframework.security.crypto.password.PasswordEncoder;
 import practice.jpaboard.common.config.ResultMessage;
@@ -22,6 +26,7 @@ import practice.jpaboard.repository.RoleRepository;
 import java.util.Arrays;
 import java.util.Optional;
 
+import static org.assertj.core.api.Assertions.*;
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.junit.jupiter.api.Assertions.assertThrows;
 import static org.mockito.Mockito.*;
@@ -29,16 +34,22 @@ import static org.mockito.Mockito.*;
 @ExtendWith(MockitoExtension.class)
 class MemberServiceTest {
 
-    @InjectMocks
     private MemberService memberService;
-    @Spy
     private BCryptPasswordEncoder passwordEncoder;
-    @Mock
     private JwtTokenProvider jwtTokenProvider;
     @Mock
     private MemberRepository memberRepository;
     @Mock
     private RoleRepository roleRepository;
+    @Mock
+    private UserDetailsService userDetailsService;
+
+    @BeforeEach
+    void setup() {
+        passwordEncoder = new BCryptPasswordEncoder();
+        jwtTokenProvider = new JwtTokenProvider(userDetailsService);
+        memberService = new MemberService(passwordEncoder, jwtTokenProvider, memberRepository, roleRepository);
+    }
 
     private JoinDTO joinDto() {
         return JoinDTO.builder()
@@ -108,17 +119,34 @@ class MemberServiceTest {
                 .userId("test")
                 .password("password")
                 .build();
-        PasswordEncoder localEncoder = new BCryptPasswordEncoder();
-        String encryptPassword = localEncoder.encode(loginDTO.getPassword());
+        String encryptPassword = new BCryptPasswordEncoder().encode(loginDTO.getPassword());
 
         // when
-        doReturn(Optional.of(new Member("test", encryptPassword, "test", 20))).when(memberRepository)
+        doReturn(Optional.of(new Member("test", encryptPassword + "111", "test", 20))).when(memberRepository)
                 .findByUserId(anyString());
-        doReturn(false).when(passwordEncoder).matches(anyString(), anyString());
 
         // then
         assertThrows(IllegalArgumentException.class, () -> {
             memberService.login(loginDTO);
         });
+    }
+
+    @Test
+    @DisplayName("로그인 성공")
+    public void loginSuccess() throws Exception {
+        // given
+        LoginDTO loginDTO = LoginDTO.builder()
+                .userId("test")
+                .password("password")
+                .build();
+        String encryptPassword = new BCryptPasswordEncoder().encode(loginDTO.getPassword());
+
+        // when
+        doReturn(Optional.of(new Member(loginDTO.getUserId(), encryptPassword, "test", 20, Arrays.asList(new Role(1L, "ROLE_USER")))))
+                .when(memberRepository).findByUserId(loginDTO.getUserId());
+        LoginDTO result = (LoginDTO) memberService.login(loginDTO).getData();
+
+        // then
+        assertThat(result.getToken()).isNotNull();
     }
 }

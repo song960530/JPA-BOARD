@@ -1,8 +1,8 @@
 package practice.jpaboard.service;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
+import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.jpaboard.common.config.ResultMessage;
@@ -14,13 +14,19 @@ import practice.jpaboard.repository.MemberRepository;
 import practice.jpaboard.repository.RoleRepository;
 
 @Service
-@RequiredArgsConstructor
 @Transactional(readOnly = true)
 public class MemberService {
     private final BCryptPasswordEncoder passwordEncoder;
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
+
+    public MemberService(BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, MemberRepository memberRepository, RoleRepository roleRepository) {
+        this.passwordEncoder = passwordEncoder;
+        this.jwtTokenProvider = jwtTokenProvider;
+        this.memberRepository = memberRepository;
+        this.roleRepository = roleRepository;
+    }
 
     @Transactional
     public ResultMessage join(JoinDTO joinDto) {

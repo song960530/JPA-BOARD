@@ -1,6 +1,5 @@
 package practice.jpaboard.controller;
 
-import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -14,7 +13,6 @@ import practice.jpaboard.dto.LoginDTO;
 import practice.jpaboard.service.MemberService;
 
 @RestController
-@RequiredArgsConstructor
 public class MemberController {
 
     private final MemberService memberService;
@@ -25,6 +23,10 @@ public class MemberController {
         header.setContentType(MediaType.APPLICATION_JSON);
 
         return header;
+    }
+
+    public MemberController(MemberService memberService) {
+        this.memberService = memberService;
     }
 
     @PostMapping("/join")

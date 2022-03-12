@@ -7,7 +7,6 @@ import org.springframework.web.bind.annotation.RestController;
 
 @RestController
 @Slf4j
-@RequiredArgsConstructor
 public class HelloController {
     @GetMapping("/hello")
     public String hello() {

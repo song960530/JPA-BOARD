@@ -6,6 +6,7 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import practice.jpaboard.common.config.security.JwtTokenProvider;
+import practice.jpaboard.dto.JoinDto;
 import practice.jpaboard.entity.Member;
 import practice.jpaboard.entity.Role;
 import practice.jpaboard.repository.MemberRepository;
@@ -25,17 +26,11 @@ public class MemberController {
     private final RoleRepository roleRepository;
 
     @PostMapping("/join")
-    public void join(@RequestBody Map<String, String> user) {
-        Role role = roleRepository.findByRoles("ROLE_USER"); // 앞에 ROLE_은 시큐리티에서 default prefix로 정의해둔거라 꼭 붙여야함
+    public void join(@RequestBody JoinDto joinDto) {
+        joinDto.setRole(roleRepository.findByRoles("ROLE_USER")); // 앞에 ROLE_은 시큐리티에서 default prefix로 정의해둔거라 꼭 붙여야함
+        joinDto.setEncrytPassword(passwordEncoder.encode(joinDto.getPassword()));
 
-        Member member = new Member(
-                user.get("userId")
-                , passwordEncoder.encode(user.get("password"))
-                , user.get("name")
-                , Integer.parseInt(user.get("age"))
-                , Arrays.asList(role)
-        );
-        memberRepository.save(member);
+        memberRepository.save(joinDto.toEntity());
     }
 
     @PostMapping("/login")

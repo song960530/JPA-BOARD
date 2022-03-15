@@ -6,6 +6,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.jpaboard.common.config.ResultMessage;
 import practice.jpaboard.common.exception.board.BoardException;
+import practice.jpaboard.common.exception.board.BoardNotFoundException;
 import practice.jpaboard.dto.BoardDto;
 import practice.jpaboard.dto.commentDto;
 import practice.jpaboard.entity.Board;
@@ -49,14 +50,14 @@ public class BoardService {
         }
 
         BoardDto result = boardRepository.findBoardDTOByNo(board.getNo()).orElseThrow(
-                () -> new BoardException("게시물 조회에 실패했습니다"));
+                () -> new BoardNotFoundException());
 
         return ResultMessage.of(true, result, HttpStatus.OK);
     }
 
     public ResultMessage detail(Long no) {
         BoardDto result = boardRepository.findBoardDTOByNo(no).orElseThrow(
-                () -> new BoardException("게시물 조회에 실패했습니다"));
+                () -> new BoardNotFoundException());
         Member member = commonService.findUserIdFromAuth();
 
         result.setLike(likeRepository.existsByMemberNoAndBoardNo(member.getNo(), no));
@@ -68,7 +69,7 @@ public class BoardService {
     public ResultMessage like(HttpServletRequest request, Long no) {
         Member member = commonService.findUserIdFromAuth();
         Board board = boardRepository.findById(no).orElseThrow(
-                () -> new BoardException("게시물 조회에 실패했습니다"));
+                () -> new BoardNotFoundException());
 
         Like like = new Like(member, board);
         try {
@@ -88,7 +89,7 @@ public class BoardService {
     public ResultMessage comment(HttpServletRequest request, Long no, commentDto commentDto) {
         Member member = commonService.findUserIdFromAuth();
         Board board = boardRepository.findById(no).orElseThrow(
-                () -> new BoardException("게시물 조회에 실패했습니다"));
+                () -> new BoardNotFoundException());
 
         try {
             if (HttpMethod.POST.matches(request.getMethod())) {

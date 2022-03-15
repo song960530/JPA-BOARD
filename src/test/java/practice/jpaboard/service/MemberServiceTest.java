@@ -1,23 +1,18 @@
 package practice.jpaboard.service;
 
-import org.junit.jupiter.api.Assertions;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.extension.ExtendWith;
-import org.mockito.InjectMocks;
 import org.mockito.Mock;
-import org.mockito.MockitoAnnotations;
-import org.mockito.Spy;
 import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import practice.jpaboard.common.config.ResultMessage;
 import practice.jpaboard.common.config.security.JwtTokenProvider;
-import practice.jpaboard.dto.JoinDTO;
-import practice.jpaboard.dto.LoginDTO;
+import practice.jpaboard.dto.JoinDto;
+import practice.jpaboard.dto.LoginDto;
 import practice.jpaboard.entity.Member;
 import practice.jpaboard.entity.Role;
 import practice.jpaboard.repository.MemberRepository;
@@ -43,16 +38,18 @@ class MemberServiceTest {
     private RoleRepository roleRepository;
     @Mock
     private UserDetailsService userDetailsService;
+    @Mock
+    private CommonService commonService;
 
     @BeforeEach
     void setup() {
         passwordEncoder = new BCryptPasswordEncoder();
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
-        memberService = new MemberService(passwordEncoder, jwtTokenProvider, memberRepository, roleRepository);
+        memberService = new MemberService(passwordEncoder, jwtTokenProvider, memberRepository, roleRepository, commonService);
     }
 
-    private JoinDTO joinDto() {
-        return JoinDTO.builder()
+    private JoinDto joinDto() {
+        return JoinDto.builder()
                 .userId("test")
                 .password("패스워드")
                 .name("이름")
@@ -64,7 +61,7 @@ class MemberServiceTest {
     @DisplayName("회원가입 성공")
     public void joinSuccess() throws Exception {
         // given
-        JoinDTO joinDto = joinDto();
+        JoinDto joinDto = joinDto();
 
         // when
         doReturn(new Role(1L, "ROLE_USER")).when(roleRepository).findByRoles(anyString());
@@ -81,7 +78,7 @@ class MemberServiceTest {
     @DisplayName("회원가입 실패")
     public void joinFail() throws Exception {
         // given
-        JoinDTO joinDto = joinDto();
+        JoinDto joinDto = joinDto();
 
         // when
         doReturn(new Role(1L, "ROLE_USER")).when(roleRepository).findByRoles(anyString());
@@ -97,7 +94,7 @@ class MemberServiceTest {
     @DisplayName("ID 조회되지 않음")
     public void loginNotFoundId() throws Exception {
         // given
-        LoginDTO loginDTO = LoginDTO.builder()
+        LoginDto loginDTO = LoginDto.builder()
                 .userId("test")
                 .password("password")
                 .build();
@@ -115,7 +112,7 @@ class MemberServiceTest {
     @DisplayName("패스워드 맞지 않음")
     public void loginNotMatchedPassword() throws Exception {
         // given
-        LoginDTO loginDTO = LoginDTO.builder()
+        LoginDto loginDTO = LoginDto.builder()
                 .userId("test")
                 .password("password")
                 .build();
@@ -135,7 +132,7 @@ class MemberServiceTest {
     @DisplayName("로그인 성공")
     public void loginSuccess() throws Exception {
         // given
-        LoginDTO loginDTO = LoginDTO.builder()
+        LoginDto loginDTO = LoginDto.builder()
                 .userId("test")
                 .password("password")
                 .build();
@@ -144,7 +141,7 @@ class MemberServiceTest {
         // when
         doReturn(Optional.of(new Member(loginDTO.getUserId(), encryptPassword, "test", 20, Arrays.asList(new Role(1L, "ROLE_USER")))))
                 .when(memberRepository).findByUserId(loginDTO.getUserId());
-        LoginDTO result = (LoginDTO) memberService.login(loginDTO).getData();
+        LoginDto result = (LoginDto) memberService.login(loginDTO).getData();
 
         // then
         assertThat(result.getToken()).isNotNull();

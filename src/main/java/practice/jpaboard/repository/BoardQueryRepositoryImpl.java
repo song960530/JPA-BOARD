@@ -1,12 +1,9 @@
 package practice.jpaboard.repository;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
-import practice.jpaboard.dto.BoardDTO;
+import practice.jpaboard.dto.BoardDto;
 import practice.jpaboard.dto.QBoardDTO;
-import practice.jpaboard.entity.QBoard;
-import practice.jpaboard.entity.QMember;
 
-import java.util.List;
 import java.util.Optional;
 
 import static practice.jpaboard.entity.QBoard.board;
@@ -21,8 +18,8 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     }
 
     @Override
-    public Optional<BoardDTO> findBoardDTOByNo(Long no) {
-        BoardDTO boardDTO = jpaQueryFactory
+    public Optional<BoardDto> findBoardDTOByNo(Long no) {
+        BoardDto boardDTO = jpaQueryFactory
                 .select(new QBoardDTO(
                         board.no
                         , member.userId

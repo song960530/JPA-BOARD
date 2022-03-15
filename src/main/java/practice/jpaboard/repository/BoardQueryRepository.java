@@ -1,10 +1,10 @@
 package practice.jpaboard.repository;
 
-import practice.jpaboard.dto.BoardDTO;
+import practice.jpaboard.dto.BoardDto;
 
 import java.util.Optional;
 
 public interface BoardQueryRepository {
-    Optional<BoardDTO> findBoardDTOByNo(Long no);
+    Optional<BoardDto> findBoardDTOByNo(Long no);
 
 }

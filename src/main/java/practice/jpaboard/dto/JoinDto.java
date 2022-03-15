@@ -13,7 +13,7 @@ import java.util.Arrays;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class JoinDTO {
+public class JoinDto {
     private String userId;
     private String password;
     private String encrytPassword;

@@ -10,7 +10,7 @@ import practice.jpaboard.entity.Member;
 @Builder
 @AllArgsConstructor
 @NoArgsConstructor
-public class LoginDTO {
+public class LoginDto {
 
     private String userId;
     private String password;
@@ -18,7 +18,7 @@ public class LoginDTO {
     private String name;
     private String token;
 
-    public LoginDTO(Member member, String token) {
+    public LoginDto(Member member, String token) {
         this.userId = member.getUserId();
         this.age = member.getAge();
         this.name = member.getName();

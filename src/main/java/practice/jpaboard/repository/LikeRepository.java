@@ -6,5 +6,8 @@ import practice.jpaboard.entity.Like;
 import practice.jpaboard.entity.Member;
 
 public interface LikeRepository extends JpaRepository<Like, Long> {
-    Boolean existsByMemberAndBoard(Member member, Board board);
+
+    Boolean existsByMemberNoAndBoardNo(Long memberNo, Long boardNo);
+
+    void deleteByMemberNoAndBoardNo(Long memberNo, Long boardNo);
 }

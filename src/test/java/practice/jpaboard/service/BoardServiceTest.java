@@ -11,10 +11,11 @@ import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
 import practice.jpaboard.common.config.ResultMessage;
 import practice.jpaboard.common.exception.board.BoardException;
-import practice.jpaboard.dto.BoardDTO;
+import practice.jpaboard.dto.BoardDto;
 import practice.jpaboard.entity.Board;
 import practice.jpaboard.entity.Member;
 import practice.jpaboard.repository.BoardRepository;
+import practice.jpaboard.repository.LikeRepository;
 import practice.jpaboard.repository.MemberRepository;
 
 import java.util.Optional;
@@ -33,14 +34,18 @@ class BoardServiceTest {
     private MemberRepository memberRepository;
     @Mock
     private BoardRepository boardRepository;
+    @Mock
+    private LikeRepository likeRepository;
+    @Mock
+    private CommonService commonService;
 
     @BeforeEach
     void setup() {
-        boardService = new BoardService(memberRepository, boardRepository);
+        boardService = new BoardService(memberRepository, boardRepository, likeRepository, commonService);
     }
 
-    BoardDTO boardDTO() {
-        return BoardDTO.builder()
+    BoardDto boardDTO() {
+        return BoardDto.builder()
                 .userId("test")
                 .title("test")
                 .content("content")
@@ -54,7 +59,7 @@ class BoardServiceTest {
     @WithMockUser(username = "test", password = "test", roles = {"USER"})
     public void illegalargExceptionTest() throws Exception {
         // given
-        BoardDTO boardDTO = boardDTO();
+        BoardDto boardDTO = boardDTO();
 
         // when
         doReturn(Optional.empty()).when(memberRepository).findByUserId(anyString());
@@ -70,7 +75,7 @@ class BoardServiceTest {
     @WithMockUser(username = "test", password = "test", roles = {"USER"})
     public void saveException() throws Exception {
         // given
-        BoardDTO boardDTO = boardDTO();
+        BoardDto boardDTO = boardDTO();
         Member member = new Member("test", "test", "test", 20);
 
         // when
@@ -88,7 +93,7 @@ class BoardServiceTest {
     @WithMockUser(username = "test", password = "test", roles = {"USER"})
     public void failFindBoard() throws Exception {
         // given
-        BoardDTO boardDTO = boardDTO();
+        BoardDto boardDTO = boardDTO();
         Member member = new Member("test", "test", "test", 20);
 
         // when
@@ -108,7 +113,7 @@ class BoardServiceTest {
     @WithMockUser(username = "test", password = "test", roles = {"USER"})
     public void successSaveBoard() throws Exception {
         // given
-        BoardDTO boardDTO = boardDTO();
+        BoardDto boardDTO = boardDTO();
         Member member = new Member("test", "test", "test", 20);
 
         // when

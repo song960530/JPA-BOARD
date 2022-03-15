@@ -8,8 +8,8 @@ import org.springframework.web.bind.annotation.PostMapping;
 import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RestController;
 import practice.jpaboard.common.config.ResultMessage;
-import practice.jpaboard.dto.JoinDTO;
-import practice.jpaboard.dto.LoginDTO;
+import practice.jpaboard.dto.JoinDto;
+import practice.jpaboard.dto.LoginDto;
 import practice.jpaboard.service.MemberService;
 
 @RestController
@@ -30,13 +30,13 @@ public class MemberController {
     }
 
     @PostMapping("/join")
-    public ResponseEntity<ResultMessage> join(@RequestBody JoinDTO joinDto) {
+    public ResponseEntity<ResultMessage> join(@RequestBody JoinDto joinDto) {
 
         return new ResponseEntity<>(memberService.join(joinDto), header, HttpStatus.OK);
     }
 
     @PostMapping("/login")
-    public ResponseEntity<ResultMessage> login(@RequestBody LoginDTO loginDto) {
+    public ResponseEntity<ResultMessage> login(@RequestBody LoginDto loginDto) {
 
         return new ResponseEntity<>(memberService.login(loginDto), header, HttpStatus.OK);
     }

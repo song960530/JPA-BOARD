@@ -2,13 +2,12 @@ package practice.jpaboard.service;
 
 import org.springframework.http.HttpStatus;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import practice.jpaboard.common.config.ResultMessage;
 import practice.jpaboard.common.config.security.JwtTokenProvider;
-import practice.jpaboard.dto.JoinDTO;
-import practice.jpaboard.dto.LoginDTO;
+import practice.jpaboard.dto.JoinDto;
+import practice.jpaboard.dto.LoginDto;
 import practice.jpaboard.entity.Member;
 import practice.jpaboard.repository.MemberRepository;
 import practice.jpaboard.repository.RoleRepository;
@@ -20,16 +19,18 @@ public class MemberService {
     private final JwtTokenProvider jwtTokenProvider;
     private final MemberRepository memberRepository;
     private final RoleRepository roleRepository;
+    private final CommonService commonService;
 
-    public MemberService(BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, MemberRepository memberRepository, RoleRepository roleRepository) {
+    public MemberService(BCryptPasswordEncoder passwordEncoder, JwtTokenProvider jwtTokenProvider, MemberRepository memberRepository, RoleRepository roleRepository, CommonService commonService) {
         this.passwordEncoder = passwordEncoder;
         this.jwtTokenProvider = jwtTokenProvider;
         this.memberRepository = memberRepository;
         this.roleRepository = roleRepository;
+        this.commonService = commonService;
     }
 
     @Transactional
-    public ResultMessage join(JoinDTO joinDto) {
+    public ResultMessage join(JoinDto joinDto) {
 
         try {
             joinDto.setRole(roleRepository.findByRoles("ROLE_USER")); // 앞에 ROLE_은 시큐리티에서 default prefix로 정의해둔거라 꼭 붙여야함
@@ -44,9 +45,8 @@ public class MemberService {
     }
 
 
-    public ResultMessage login(LoginDTO loginDto) {
-        Member member = memberRepository.findByUserId(loginDto.getUserId())
-                .orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다"));
+    public ResultMessage login(LoginDto loginDto) {
+        Member member = memberRepository.findByUserId(loginDto.getUserId()).orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다"));
 
         if (!passwordEncoder.matches(loginDto.getPassword(), member.getPassword()))
             throw new IllegalArgumentException("패스워드가 맞지 않습니다");
@@ -54,6 +54,6 @@ public class MemberService {
         String token = jwtTokenProvider.createToken(member.getUserId(), member.getRoles());
 
 
-        return ResultMessage.of(true, new LoginDTO(member, token), HttpStatus.OK);
+        return ResultMessage.of(true, new LoginDto(member, token), HttpStatus.OK);
     }
 }

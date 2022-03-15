@@ -14,8 +14,8 @@ import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
 import practice.jpaboard.common.config.ResultMessage;
-import practice.jpaboard.dto.JoinDTO;
-import practice.jpaboard.dto.LoginDTO;
+import practice.jpaboard.dto.JoinDto;
+import practice.jpaboard.dto.LoginDto;
 import practice.jpaboard.service.MemberService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -39,8 +39,8 @@ class MemberControllerTest {
         mockMvc = MockMvcBuilders.standaloneSetup(memberController).build();
     }
 
-    private JoinDTO joinDTO() {
-        return JoinDTO.builder()
+    private JoinDto joinDTO() {
+        return JoinDto.builder()
                 .userId("test")
                 .password("패스워드")
                 .age(20)
@@ -52,8 +52,8 @@ class MemberControllerTest {
     @DisplayName("회원가입 호출")
     public void join() throws Exception {
         // given
-        JoinDTO joinDTO = joinDTO();
-        doReturn(ResultMessage.of(true, HttpStatus.OK)).when(memberService).join(any(JoinDTO.class));
+        JoinDto joinDTO = joinDTO();
+        doReturn(ResultMessage.of(true, HttpStatus.OK)).when(memberService).join(any(JoinDto.class));
 
         // when
         ResultActions resultActions = mockMvc.perform(
@@ -73,13 +73,13 @@ class MemberControllerTest {
     @DisplayName("로그인 호출")
     public void login() throws Exception {
         // given
-        doReturn(ResultMessage.of(true, null, HttpStatus.OK)).when(memberService).login(any(LoginDTO.class));
+        doReturn(ResultMessage.of(true, null, HttpStatus.OK)).when(memberService).login(any(LoginDto.class));
 
         // when
         ResultActions resultActions = mockMvc.perform(
                 MockMvcRequestBuilders.post("/login")
                         .contentType(MediaType.APPLICATION_JSON)
-                        .content(new Gson().toJson(new LoginDTO()))
+                        .content(new Gson().toJson(new LoginDto()))
         );
 
         // then

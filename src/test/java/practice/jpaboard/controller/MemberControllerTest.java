@@ -13,10 +13,11 @@ import org.springframework.test.web.servlet.MockMvc;
 import org.springframework.test.web.servlet.ResultActions;
 import org.springframework.test.web.servlet.request.MockMvcRequestBuilders;
 import org.springframework.test.web.servlet.setup.MockMvcBuilders;
-import practice.jpaboard.common.config.ResultMessage;
-import practice.jpaboard.dto.JoinDto;
-import practice.jpaboard.dto.LoginDto;
-import practice.jpaboard.service.MemberService;
+import practice.jpaboard.domain.member.controller.MemberController;
+import practice.jpaboard.global.common.response.ResultMessage;
+import practice.jpaboard.domain.member.dto.JoinDto;
+import practice.jpaboard.domain.member.dto.LoginDto;
+import practice.jpaboard.domain.member.service.MemberService;
 
 import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.Mockito.any;

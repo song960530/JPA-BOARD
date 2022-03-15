@@ -9,14 +9,15 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.userdetails.UserDetailsService;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import practice.jpaboard.common.config.ResultMessage;
-import practice.jpaboard.common.config.security.JwtTokenProvider;
-import practice.jpaboard.dto.JoinDto;
-import practice.jpaboard.dto.LoginDto;
-import practice.jpaboard.entity.Member;
-import practice.jpaboard.entity.Role;
-import practice.jpaboard.repository.MemberRepository;
-import practice.jpaboard.repository.RoleRepository;
+import practice.jpaboard.domain.member.service.MemberService;
+import practice.jpaboard.global.common.response.ResultMessage;
+import practice.jpaboard.global.config.jwt.JwtTokenProvider;
+import practice.jpaboard.domain.member.dto.JoinDto;
+import practice.jpaboard.domain.member.dto.LoginDto;
+import practice.jpaboard.domain.member.entity.Member;
+import practice.jpaboard.domain.member.entity.Role;
+import practice.jpaboard.domain.member.repository.MemberRepository;
+import practice.jpaboard.domain.member.repository.RoleRepository;
 
 import java.util.Arrays;
 import java.util.Optional;
@@ -38,14 +39,12 @@ class MemberServiceTest {
     private RoleRepository roleRepository;
     @Mock
     private UserDetailsService userDetailsService;
-    @Mock
-    private CommonService commonService;
 
     @BeforeEach
     void setup() {
         passwordEncoder = new BCryptPasswordEncoder();
         jwtTokenProvider = new JwtTokenProvider(userDetailsService);
-        memberService = new MemberService(passwordEncoder, jwtTokenProvider, memberRepository, roleRepository, commonService);
+        memberService = new MemberService(passwordEncoder, jwtTokenProvider, memberRepository, roleRepository);
     }
 
     private JoinDto joinDto() {

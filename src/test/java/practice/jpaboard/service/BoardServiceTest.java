@@ -9,15 +9,17 @@ import org.mockito.junit.jupiter.MockitoExtension;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.test.context.support.WithMockUser;
-import practice.jpaboard.common.config.ResultMessage;
-import practice.jpaboard.common.exception.board.BoardException;
-import practice.jpaboard.dto.BoardDto;
-import practice.jpaboard.entity.Board;
-import practice.jpaboard.entity.Member;
-import practice.jpaboard.repository.BoardRepository;
-import practice.jpaboard.repository.CommentRepository;
-import practice.jpaboard.repository.LikeRepository;
-import practice.jpaboard.repository.MemberRepository;
+import practice.jpaboard.domain.board.service.BoardService;
+import practice.jpaboard.domain.member.service.MemberService;
+import practice.jpaboard.global.common.response.ResultMessage;
+import practice.jpaboard.domain.board.exception.BoardException;
+import practice.jpaboard.domain.board.dto.BoardDto;
+import practice.jpaboard.domain.board.entity.Board;
+import practice.jpaboard.domain.member.entity.Member;
+import practice.jpaboard.domain.board.repository.BoardRepository;
+import practice.jpaboard.domain.board.repository.CommentRepository;
+import practice.jpaboard.domain.board.repository.LikeRepository;
+import practice.jpaboard.domain.member.repository.MemberRepository;
 
 import java.util.Optional;
 
@@ -40,11 +42,11 @@ class BoardServiceTest {
     @Mock
     private CommentRepository commentRepository;
     @Mock
-    private CommonService commonService;
+    private MemberService memberService;
 
     @BeforeEach
     void setup() {
-        boardService = new BoardService(memberRepository, boardRepository, likeRepository, commentRepository, commonService);
+        boardService = new BoardService(memberRepository, boardRepository, likeRepository, commentRepository, memberService);
     }
 
     BoardDto boardDTO() {

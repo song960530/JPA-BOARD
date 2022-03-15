@@ -45,9 +45,27 @@ public class Comment extends BaseEntity {
     @Column(name = "CONTENT")
     private String content;
 
+    @Column(
+            name = "DELETEYN"
+            , columnDefinition = "varchar2(1) default N"
+    )
+    private String deleteyn;
+
     public Comment(Member member, Board board, String content) {
         this.member = member;
         this.board = board;
         this.content = content;
+    }
+
+    public void setParent(Long parent) {
+        this.parent = parent;
+    }
+
+    public void setContent(String content) {
+        this.content = content;
+    }
+
+    public void setDeleteyn(String deleteyn) {
+        this.deleteyn = deleteyn;
     }
 }

@@ -29,7 +29,7 @@ public class BoardController {
         this.boardService = boardService;
     }
 
-    @PostMapping("/board/upload")
+    @PostMapping("/board")
     public ResponseEntity<ResultMessage> upload(@RequestBody BoardDto boardDTO) {
         return new ResponseEntity<>(boardService.upload(boardDTO), header, HttpStatus.OK);
     }
@@ -44,8 +44,8 @@ public class BoardController {
         return new ResponseEntity<>(boardService.like(request, no), header, HttpStatus.OK);
     }
 
-    @PostMapping("/board/{no}/comment")
-    public ResponseEntity<ResultMessage> comment(@PathVariable Long no, @RequestBody commentDto commentDto) {
-        return new ResponseEntity<>(boardService.comment(no), header, HttpStatus.OK);
+    @RequestMapping(value = "/board/{no}/comment", method = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PATCH})
+    public ResponseEntity<ResultMessage> comment(HttpServletRequest request, @PathVariable Long no, @RequestBody commentDto commentDto) {
+        return new ResponseEntity<>(boardService.comment(request, no, commentDto), header, HttpStatus.OK);
     }
 }

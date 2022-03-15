@@ -15,6 +15,7 @@ import practice.jpaboard.dto.BoardDto;
 import practice.jpaboard.entity.Board;
 import practice.jpaboard.entity.Member;
 import practice.jpaboard.repository.BoardRepository;
+import practice.jpaboard.repository.CommentRepository;
 import practice.jpaboard.repository.LikeRepository;
 import practice.jpaboard.repository.MemberRepository;
 
@@ -37,11 +38,13 @@ class BoardServiceTest {
     @Mock
     private LikeRepository likeRepository;
     @Mock
+    private CommentRepository commentRepository;
+    @Mock
     private CommonService commonService;
 
     @BeforeEach
     void setup() {
-        boardService = new BoardService(memberRepository, boardRepository, likeRepository, commonService);
+        boardService = new BoardService(memberRepository, boardRepository, likeRepository, commentRepository, commonService);
     }
 
     BoardDto boardDTO() {

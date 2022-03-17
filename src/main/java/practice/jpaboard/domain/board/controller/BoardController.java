@@ -6,6 +6,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
+import org.springframework.web.servlet.ModelAndView;
 import practice.jpaboard.domain.board.dto.BoardDto;
 import practice.jpaboard.domain.board.dto.commentDto;
 import practice.jpaboard.domain.board.service.BoardFileUploadService;
@@ -35,7 +36,7 @@ public class BoardController {
     }
 
     @PostMapping("/board")
-    public ResponseEntity<ResultMessage> upload(@RequestBody BoardDto boardDTO) {
+    public ResponseEntity<ResultMessage> upload(@RequestPart("dto") BoardDto boardDTO, @RequestPart(value = "file", required = false) List<MultipartFile> fileList) {
         return new ResponseEntity<>(boardService.upload(boardDTO), header, HttpStatus.OK);
     }
 
@@ -57,5 +58,12 @@ public class BoardController {
     @RequestMapping(value = "/upload", method = {RequestMethod.POST})
     public void test(List<MultipartFile> fileList) {
         boardFileUploadService.fileUpload(fileList);
+    }
+
+    @GetMapping("/test/index")
+    public ModelAndView index() {
+        ModelAndView mav = new ModelAndView();
+        mav.setViewName("/test/index");
+        return mav;
     }
 }

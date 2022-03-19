@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import practice.jpaboard.domain.board.exception.FileUploadFailException;
 import practice.jpaboard.global.common.response.ResultMessage;
 import practice.jpaboard.domain.board.exception.BoardException;
 import practice.jpaboard.domain.board.exception.BoardNotFoundException;
@@ -47,6 +48,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(BoardNotFoundException.class)
     public ResponseEntity<ResultMessage> boardNotFoundException(BoardNotFoundException e) {
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_JSON);
+
+        log.error(e.getMessage());
+
+        return new ResponseEntity<>(ResultMessage.of(false, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()), header, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(FileUploadFailException.class)
+    public ResponseEntity<ResultMessage> fileUploadException(FileUploadFailException e) {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_JSON);
 

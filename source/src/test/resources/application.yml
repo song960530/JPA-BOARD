@@ -3,7 +3,7 @@ spring:
     active: test
 
   datasource:
-    url: jdbc:oracle:thin:@localhost:1521:xe
+    url: jdbc:oracle:thin:@49.50.164.87:1521:xe
     username: boardtest
     password: boardtest
     driver-class-name: oracle.jdbc.driver.OracleDriver
@@ -17,6 +17,12 @@ spring:
         format_sql: true
         # use_sql_comments: true
     database-platform: org.hibernate.dialect.Oracle8iDialect
+
+  servlet:
+    multipart:
+      max-file-size: 10MB
+      max-request-size: 10MB
+      location: C:\\Users\\MunJun\\Desktop\\Study\\testfilepath
 
 logging.level:
   org.hibernate.SQL: debug

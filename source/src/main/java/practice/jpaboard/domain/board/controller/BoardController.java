@@ -55,11 +55,6 @@ public class BoardController {
         return new ResponseEntity<>(boardService.comment(request, no, commentDto), header, HttpStatus.OK);
     }
 
-//    @RequestMapping(value = "/upload", method = {RequestMethod.POST})
-//    public void test(List<MultipartFile> fileList) {
-//        boardFileUploadService.fileUpload(fileList);
-//    }
-
     @GetMapping("/test/index")
     public ModelAndView index() {
         ModelAndView mav = new ModelAndView();

@@ -56,14 +56,14 @@ public class BoardService {
 
         if (fileList != null && fileList.size() > 0) fileUploadService.fileUpload(member, board, fileList); // 파일저장 호출
 
-        BoardDto result = boardRepository.findBoardDTOByNo(board.getNo()).orElseThrow(
+        BoardDto result = boardRepository.findBoardDtoByNo(board.getNo()).orElseThrow(
                 () -> new BoardNotFoundException());
 
         return ResultMessage.of(true, result, HttpStatus.OK);
     }
 
     public ResultMessage detail(Long no) {
-        BoardDto result = boardRepository.findBoardDTOByNo(no).orElseThrow(
+        BoardDto result = boardRepository.findBoardDtoByNo(no).orElseThrow(
                 () -> new BoardNotFoundException());
         Member member = memberService.findUserIdFromAuth();
 
@@ -112,7 +112,6 @@ public class BoardService {
                         () -> new BoardException("댓글 조회에 실패했습니다."));
                 comment.setDeleteyn("Y");
             }
-
         } catch (Exception e) {
             throw new BoardException("댓글 변경을 실패했습니다.");
         }

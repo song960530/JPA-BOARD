@@ -19,7 +19,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     }
 
     @Override
-    public Optional<BoardDto> findBoardDTOByNo(Long no) {
+    public Optional<BoardDto> findBoardDtoByNo(Long no) {
         BoardDto boardDTO = jpaQueryFactory
                 .select(new QBoardDTO(
                         board.no

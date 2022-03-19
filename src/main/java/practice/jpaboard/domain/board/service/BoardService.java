@@ -4,22 +4,24 @@ import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import practice.jpaboard.domain.member.service.MemberService;
-import practice.jpaboard.global.common.response.ResultMessage;
-import practice.jpaboard.domain.board.exception.BoardException;
-import practice.jpaboard.domain.board.exception.BoardNotFoundException;
+import org.springframework.web.multipart.MultipartFile;
 import practice.jpaboard.domain.board.dto.BoardDto;
 import practice.jpaboard.domain.board.dto.commentDto;
 import practice.jpaboard.domain.board.entity.Board;
 import practice.jpaboard.domain.board.entity.Comment;
 import practice.jpaboard.domain.board.entity.Like;
-import practice.jpaboard.domain.member.entity.Member;
+import practice.jpaboard.domain.board.exception.BoardException;
+import practice.jpaboard.domain.board.exception.BoardNotFoundException;
 import practice.jpaboard.domain.board.repository.BoardRepository;
 import practice.jpaboard.domain.board.repository.CommentRepository;
 import practice.jpaboard.domain.board.repository.LikeRepository;
+import practice.jpaboard.domain.member.entity.Member;
 import practice.jpaboard.domain.member.repository.MemberRepository;
+import practice.jpaboard.domain.member.service.MemberService;
+import practice.jpaboard.global.common.response.ResultMessage;
 
 import javax.servlet.http.HttpServletRequest;
+import java.util.List;
 
 @Service
 @Transactional(readOnly = true)
@@ -30,17 +32,19 @@ public class BoardService {
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
     private final MemberService memberService;
+    private final BoardFileUploadService fileUploadService;
 
-    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, LikeRepository likeRepository, CommentRepository commentRepository, MemberService memberService) {
+    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, LikeRepository likeRepository, CommentRepository commentRepository, MemberService memberService, BoardFileUploadService boardFileUploadService) {
         this.memberRepository = memberRepository;
         this.boardRepository = boardRepository;
         this.likeRepository = likeRepository;
         this.commentRepository = commentRepository;
         this.memberService = memberService;
+        this.fileUploadService = boardFileUploadService;
     }
 
     @Transactional
-    public ResultMessage upload(BoardDto boardDTO) {
+    public ResultMessage upload(BoardDto boardDTO, List<MultipartFile> fileList) {
         Board board;
         Member member = memberService.findUserIdFromAuth();
 
@@ -49,6 +53,8 @@ public class BoardService {
         } catch (Exception e) {
             throw new BoardException("게시글 저장을 실패하였습니다.");
         }
+
+        if (fileList != null && fileList.size() > 0) fileUploadService.fileUpload(member, board, fileList); // 파일저장 호출
 
         BoardDto result = boardRepository.findBoardDTOByNo(board.getNo()).orElseThrow(
                 () -> new BoardNotFoundException());

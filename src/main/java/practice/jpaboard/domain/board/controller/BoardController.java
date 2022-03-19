@@ -37,7 +37,7 @@ public class BoardController {
 
     @PostMapping("/board")
     public ResponseEntity<ResultMessage> upload(@RequestPart("dto") BoardDto boardDTO, @RequestPart(value = "file", required = false) List<MultipartFile> fileList) {
-        return new ResponseEntity<>(boardService.upload(boardDTO), header, HttpStatus.OK);
+        return new ResponseEntity<>(boardService.upload(boardDTO, fileList), header, HttpStatus.OK);
     }
 
     @GetMapping("/board/{no}")
@@ -55,10 +55,10 @@ public class BoardController {
         return new ResponseEntity<>(boardService.comment(request, no, commentDto), header, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/upload", method = {RequestMethod.POST})
-    public void test(List<MultipartFile> fileList) {
-        boardFileUploadService.fileUpload(fileList);
-    }
+//    @RequestMapping(value = "/upload", method = {RequestMethod.POST})
+//    public void test(List<MultipartFile> fileList) {
+//        boardFileUploadService.fileUpload(fileList);
+//    }
 
     @GetMapping("/test/index")
     public ModelAndView index() {

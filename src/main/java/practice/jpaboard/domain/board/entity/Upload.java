@@ -41,9 +41,10 @@ public class Upload extends BaseTimeEntity {
     @Column(name = "ENCRYPT_NAME")
     private String encryptName;
 
-    public Upload(Member member, Board board, String originName) {
+    public Upload(Member member, Board board, String originName, String encryptName) {
         this.member = member;
         this.board = board;
         this.originName = originName;
+        this.encryptName = encryptName;
     }
 }

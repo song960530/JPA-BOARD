@@ -1,0 +1,76 @@
+- JDK 설치
+sudo apt-get update
+sudo apt-get install openjdk-8-jdk
+java -version
+
+- 기본 포트인 80포트를 Tomcat 포트 8080으로 리디렉트 시켜줘서 일반 아이피 주소만 들어가도 자동으로 8080으로 연결된다.
+sudo iptables -t nat -A PREROUTING -i eth0 -p tcp --dport 80 -j REDIRECT --to-port 8080
+
+- root 계정 패스워드 변경
+sudo passwd [계정이름]
+
+- 계정 생성
+sudo adduser [계정이름]
+
+- sudo 권한 부여방법 (readonly면 chmod로 권한 변경 후 작업) -> sudo시 패스워드를 물어보지 않음
+sudo vi /etc/sudoers
+[계정이름] ALL=NOPASSWD: ALL 넣고 저장
+
+
+
+
+
+- 도커 설치
+ - 업데이트 밑 HTTP 패키지 설치
+	sudo apt update
+
+	sudo apt-get install -y ca-certificates \ 
+    curl \
+    software-properties-common \
+    apt-transport-https \
+    gnupg \
+    lsb-release
+
+ - GPG키 및 저장소 추가
+ 	curl -fsSL https://download.docker.com/linux/ubuntu/gpg | sudo gpg --dearmor -o /usr/share/keyrings/docker-archive-keyring.gpg
+
+ - stable repository 등록
+	echo \
+	"deb [arch=amd64 signed-by=/usr/share/keyrings/docker-archive-keyring.gpg] https://download.docker.com/linux/ubuntu \
+	$(lsb_release -cs) stable" | sudo tee /etc/apt/sources.list.d/docker.list > /dev/null
+
+
+ - 도커 엔진 설치
+ 	sudo apt update
+	sudo apt-get install docker-ce docker-ce-cli containerd.io
+
+ - 도커 버전 확인
+ 	docker --version
+
+ - root 계정이 아닌 다른 계정으로 실행하고싶을 경우
+ 	- 계정이 속해있는 그룹을 확인한다
+ 		groups [계정이름]
+
+	- 그룹 생성
+		sudo groupadd docker
+ 
+ 	- 그룹 추가
+ 		sudo usermod -aG docker user
+
+	- 접근에러가 나지 않게 미리 권한 열어두기
+		sudo chmod 666 /var/run/docker.sock
+
+	- docker 재시작
+		sudo service docker restart
+
+	- 테스트
+		docker run hello-world
+
+
+
+
+
+DB 설치
+ docker search oracle11gr2
+ docker pull imanager/oracle11gr2
+ docker run --name oracle -dp 1521:1521 imanager/oracle11gr2

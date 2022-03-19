@@ -32,9 +32,9 @@ public class BoardService {
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
     private final MemberService memberService;
-    private final BoardFileUploadService fileUploadService;
+    private final BoardFileService fileUploadService;
 
-    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, LikeRepository likeRepository, CommentRepository commentRepository, MemberService memberService, BoardFileUploadService boardFileUploadService) {
+    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, LikeRepository likeRepository, CommentRepository commentRepository, MemberService memberService, BoardFileService boardFileUploadService) {
         this.memberRepository = memberRepository;
         this.boardRepository = boardRepository;
         this.likeRepository = likeRepository;

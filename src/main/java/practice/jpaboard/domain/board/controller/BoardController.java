@@ -9,7 +9,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import practice.jpaboard.domain.board.dto.BoardDto;
 import practice.jpaboard.domain.board.dto.commentDto;
-import practice.jpaboard.domain.board.service.BoardFileUploadService;
+import practice.jpaboard.domain.board.service.BoardFileService;
 import practice.jpaboard.domain.board.service.BoardService;
 import practice.jpaboard.global.common.response.ResultMessage;
 
@@ -20,7 +20,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
-    private final BoardFileUploadService boardFileUploadService;
+    private final BoardFileService boardFileUploadService;
     private final HttpHeaders header = Headers();
 
     private HttpHeaders Headers() {
@@ -30,7 +30,7 @@ public class BoardController {
         return header;
     }
 
-    public BoardController(BoardService boardService, BoardFileUploadService boardFileUploadService) {
+    public BoardController(BoardService boardService, BoardFileService boardFileUploadService) {
         this.boardService = boardService;
         this.boardFileUploadService = boardFileUploadService;
     }

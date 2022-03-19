@@ -20,12 +20,12 @@ import java.util.UUID;
 
 @Service
 @Transactional(readOnly = true)
-public class BoardFileUploadService {
+public class BoardFileService {
     @Value("${spring.servlet.multipart.location}")
     private String FILE_PATH;
     private final UploadRepository uploadRepository;
 
-    public BoardFileUploadService(UploadRepository uploadRepository) {
+    public BoardFileService(UploadRepository uploadRepository) {
         this.uploadRepository = uploadRepository;
     }
 

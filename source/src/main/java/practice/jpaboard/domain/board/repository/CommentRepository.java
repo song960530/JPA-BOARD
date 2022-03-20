@@ -8,7 +8,7 @@ import practice.jpaboard.domain.board.entity.Comment;
 import java.util.List;
 import java.util.Optional;
 
-public interface CommentRepository extends JpaRepository<Comment, Long> {
+public interface CommentRepository extends JpaRepository<Comment, Long>, CommentQueryRepository {
     List<Comment> findByBoard(Board board);
 
     @Override

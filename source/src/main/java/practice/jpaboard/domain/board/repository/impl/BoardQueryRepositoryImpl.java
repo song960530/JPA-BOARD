@@ -2,13 +2,14 @@ package practice.jpaboard.domain.board.repository.impl;
 
 import com.querydsl.jpa.impl.JPAQueryFactory;
 import practice.jpaboard.domain.board.dto.BoardDto;
+import practice.jpaboard.domain.board.dto.QBoardDto;
 import practice.jpaboard.domain.board.repository.BoardQueryRepository;
-import practice.jpaboard.dto.QBoardDTO;
 
 import java.util.Optional;
 
-import static practice.jpaboard.entity.QBoard.board;
-import static practice.jpaboard.entity.QMember.member;
+import static practice.jpaboard.domain.board.entity.QBoard.board;
+import static practice.jpaboard.domain.member.entity.QMember.member;
+
 
 public class BoardQueryRepositoryImpl implements BoardQueryRepository {
 
@@ -21,7 +22,7 @@ public class BoardQueryRepositoryImpl implements BoardQueryRepository {
     @Override
     public Optional<BoardDto> findBoardDtoByNo(Long no) {
         BoardDto boardDTO = jpaQueryFactory
-                .select(new QBoardDTO(
+                .select(new QBoardDto(
                         board.no
                         , member.userId
                         , board.title

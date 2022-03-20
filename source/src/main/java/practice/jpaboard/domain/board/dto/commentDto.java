@@ -6,7 +6,7 @@ import lombok.NoArgsConstructor;
 
 @Data
 @NoArgsConstructor
-public class commentDto {
+public class CommentDto {
     private Long commentNo;
     private Long boardNo;
     private String userId;
@@ -14,7 +14,7 @@ public class commentDto {
     private String content;
 
     @QueryProjection
-    public commentDto(Long commentNo, Long boardNo, String userId, Long parent, String content) {
+    public CommentDto(Long commentNo, Long boardNo, String userId, Long parent, String content) {
         this.commentNo = commentNo;
         this.boardNo = boardNo;
         this.userId = userId;

@@ -1,5 +1,7 @@
 package practice.jpaboard.domain.board.controller;
 
+import org.springframework.data.domain.Pageable;
+import org.springframework.data.web.PageableDefault;
 import org.springframework.http.HttpHeaders;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.MediaType;
@@ -8,7 +10,7 @@ import org.springframework.web.bind.annotation.*;
 import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import practice.jpaboard.domain.board.dto.BoardDto;
-import practice.jpaboard.domain.board.dto.commentDto;
+import practice.jpaboard.domain.board.dto.CommentDto;
 import practice.jpaboard.domain.board.service.BoardFileService;
 import practice.jpaboard.domain.board.service.BoardService;
 import practice.jpaboard.global.common.response.ResultMessage;
@@ -41,8 +43,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/{no}")
-    public ResponseEntity<ResultMessage> detail(@PathVariable Long no) {
-        return new ResponseEntity<>(boardService.detail(no), header, HttpStatus.OK);
+    public ResponseEntity<ResultMessage> detail(@PathVariable Long no, Pageable pageable) {
+        return new ResponseEntity<>(boardService.detail(no, pageable), header, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/board/{no}/like", method = {RequestMethod.POST, RequestMethod.DELETE})
@@ -50,8 +52,13 @@ public class BoardController {
         return new ResponseEntity<>(boardService.like(request, no), header, HttpStatus.OK);
     }
 
+    @GetMapping("/board/{no}/comment")
+    public ResponseEntity<ResultMessage> saerchComments(@PathVariable Long no, @PageableDefault(page = 0, size = 10) Pageable pageable) {
+        return new ResponseEntity<>(boardService.searchComments(no, pageable), header, HttpStatus.OK);
+    }
+
     @RequestMapping(value = "/board/{no}/comment", method = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PATCH})
-    public ResponseEntity<ResultMessage> comment(HttpServletRequest request, @PathVariable Long no, @RequestBody commentDto commentDto) {
+    public ResponseEntity<ResultMessage> comment(HttpServletRequest request, @PathVariable Long no, @RequestBody CommentDto commentDto) {
         return new ResponseEntity<>(boardService.comment(request, no, commentDto), header, HttpStatus.OK);
     }
 

@@ -1,12 +1,14 @@
 package practice.jpaboard.domain.board.service;
 
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import practice.jpaboard.domain.board.dto.BoardDto;
-import practice.jpaboard.domain.board.dto.commentDto;
+import practice.jpaboard.domain.board.dto.CommentDto;
 import practice.jpaboard.domain.board.entity.Board;
 import practice.jpaboard.domain.board.entity.Comment;
 import practice.jpaboard.domain.board.entity.Like;
@@ -62,7 +64,7 @@ public class BoardService {
         return ResultMessage.of(true, result, HttpStatus.OK);
     }
 
-    public ResultMessage detail(Long no) {
+    public ResultMessage detail(Long no, Pageable pageable) {
         BoardDto result = boardRepository.findBoardDtoByNo(no).orElseThrow(
                 () -> new BoardNotFoundException());
         Member member = memberService.findUserIdFromAuth();
@@ -93,7 +95,7 @@ public class BoardService {
     }
 
     @Transactional
-    public ResultMessage comment(HttpServletRequest request, Long no, commentDto commentDto) {
+    public ResultMessage comment(HttpServletRequest request, Long no, CommentDto commentDto) {
         Member member = memberService.findUserIdFromAuth();
         Board board = boardRepository.findById(no).orElseThrow(
                 () -> new BoardNotFoundException());
@@ -117,5 +119,13 @@ public class BoardService {
         }
 
         return ResultMessage.of(true, HttpStatus.OK);
+    }
+
+    public ResultMessage searchComments(Long no, Pageable pageable) {
+        if (no == null) throw new IllegalArgumentException("댓글 조회에 실패했습니다.");
+
+        Page<CommentDto> result = commentRepository.findPageBoardDtoByNo(no, pageable);
+
+        return ResultMessage.of(true, result, HttpStatus.OK);
     }
 }

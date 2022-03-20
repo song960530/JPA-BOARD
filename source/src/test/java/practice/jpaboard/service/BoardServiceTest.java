@@ -12,7 +12,7 @@ import org.springframework.http.HttpStatus;
 import org.springframework.mock.web.MockHttpServletRequest;
 import org.springframework.security.test.context.support.WithMockUser;
 import practice.jpaboard.domain.board.dto.BoardDto;
-import practice.jpaboard.domain.board.dto.commentDto;
+import practice.jpaboard.domain.board.dto.CommentDto;
 import practice.jpaboard.domain.board.entity.Board;
 import practice.jpaboard.domain.board.entity.Comment;
 import practice.jpaboard.domain.board.entity.Like;
@@ -287,7 +287,7 @@ class BoardServiceTest {
         Member member = getMember();
         Board board = getBoard();
         Comment comment = getComment();
-        commentDto commentDto = new commentDto();
+        CommentDto commentDto = new CommentDto();
         commentDto.setParent(2L);
         HttpServletRequest request = new MockHttpServletRequest(HttpMethod.POST.name(), "");
 
@@ -311,7 +311,7 @@ class BoardServiceTest {
         Member member = getMember();
         Board board = getBoard();
         Comment comment = getComment();
-        commentDto commentDto = new commentDto();
+        CommentDto commentDto = new CommentDto();
         commentDto.setCommentNo(1L);
         HttpServletRequest request = new MockHttpServletRequest(HttpMethod.PATCH.name(), "");
 
@@ -336,7 +336,7 @@ class BoardServiceTest {
         Member member = getMember();
         Board board = getBoard();
         Comment comment = getComment();
-        commentDto commentDto = new commentDto();
+        CommentDto commentDto = new CommentDto();
         commentDto.setCommentNo(1L);
         HttpServletRequest request = new MockHttpServletRequest(HttpMethod.DELETE.name(), "");
 
@@ -377,7 +377,7 @@ class BoardServiceTest {
         Member member = getMember();
         Board board = getBoard();
         Comment comment = getComment();
-        commentDto commentDto = new commentDto();
+        CommentDto commentDto = new CommentDto();
         commentDto.setCommentNo(1L);
         HttpServletRequest request = new MockHttpServletRequest(HttpMethod.PATCH.name(), "");
 
@@ -400,7 +400,7 @@ class BoardServiceTest {
         Member member = getMember();
         Board board = getBoard();
         Comment comment = getComment();
-        commentDto commentDto = new commentDto();
+        CommentDto commentDto = new CommentDto();
         commentDto.setCommentNo(1L);
         HttpServletRequest request = new MockHttpServletRequest(HttpMethod.DELETE.name(), "");
 

@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    var test = function () {
+        var params = {
+            title: $('#title').val()
+            , content: $('#content').val()
+        }
+
+        var formData = new FormData();
+        $.each($('#file')[0].files, function (index, value) {
+            formData.append('file', value);
+        });
+        formData.append('dto', new Blob([JSON.stringify(params)], {type: "application/json"}))
+
+
+        $.ajax({
+            url: "/board",
+            type: "POST",
+            data: formData,
+            contentType: false,
+            processData: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-AUTH-TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NDc3NjI3ODIsImV4cCI6MTY0Nzc2NDU4Mn0.rnYIn1vj-yZvvidQ4g7vh5-dE10Scuu9LPp_pA_pYKk");
+            },
+            success: function (result) {
+                console.log(result)
+            },
+            error: function () {
+            }
+        })
+    }
+
+</script>
+<body>
+<div class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
+    <h2 class="w3-center">게시글 등록</h2>
+
+    <div class="w3-row w3-section">
+        <div class="w3-rest">
+            제목 : <input class="w3-input w3-border" type="text" placeholder="제목" id="title"/>
+        </div>
+    </div>
+
+    <div class="w3-row w3-section">
+        <div class="w3-rest">
+            내용 : <input class="w3-input w3-border" name="last" type="text" placeholder="내용" id="content">
+        </div>
+    </div>
+
+    <div class="w3-row w3-section">
+        <div class="w3-rest">
+            <input type="file" multiple id="file"> 파일업로드</input>
+        </div>
+    </div>
+
+    <p class="w3-center">
+        <button class="w3-button w3-section w3-blue w3-ripple" onclick="test()"> Send</button>
+    </p>
+</div>
+</body>
+</html>

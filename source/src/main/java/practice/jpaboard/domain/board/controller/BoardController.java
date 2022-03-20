@@ -55,10 +55,10 @@ public class BoardController {
         return new ResponseEntity<>(boardService.comment(request, no, commentDto), header, HttpStatus.OK);
     }
 
-    @GetMapping("/test/index")
+    @GetMapping("/board")
     public ModelAndView index() {
         ModelAndView mav = new ModelAndView();
-        mav.setViewName("/test/index");
+        mav.setViewName("/board/board");
         return mav;
     }
 }

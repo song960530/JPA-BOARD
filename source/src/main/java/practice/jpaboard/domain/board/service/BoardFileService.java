@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
+import practice.jpaboard.domain.board.dto.UploadDto;
 import practice.jpaboard.domain.board.entity.Board;
 import practice.jpaboard.domain.board.entity.Upload;
 import practice.jpaboard.domain.board.exception.FileUploadFailException;
@@ -17,6 +18,7 @@ import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 @Transactional(readOnly = true)
@@ -50,6 +52,19 @@ public class BoardFileService {
             upload = new Upload(member, board, file.getOriginalFilename(), saveFile.getName());
             uploadRepository.save(upload);
         });
+    }
+
+    public List<UploadDto> uploadDtoList(Long no) {
+        List<Upload> uploadList = uploadRepository.findByBoard_No(no);
+
+        if (uploadList != null && uploadList.size() > 0) {
+            return uploadList
+                    .stream()
+                    .map(UploadDto::new)
+                    .collect(Collectors.toList());
+        }
+
+        return null;
     }
 
     public static String MD5Generator(String fileName) {

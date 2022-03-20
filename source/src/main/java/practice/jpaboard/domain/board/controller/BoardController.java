@@ -43,8 +43,8 @@ public class BoardController {
     }
 
     @GetMapping("/board/{no}")
-    public ResponseEntity<ResultMessage> detail(@PathVariable Long no, Pageable pageable) {
-        return new ResponseEntity<>(boardService.detail(no, pageable), header, HttpStatus.OK);
+    public ResponseEntity<ResultMessage> detail(@PathVariable Long no) {
+        return new ResponseEntity<>(boardService.detail(no), header, HttpStatus.OK);
     }
 
     @RequestMapping(value = "/board/{no}/like", method = {RequestMethod.POST, RequestMethod.DELETE})

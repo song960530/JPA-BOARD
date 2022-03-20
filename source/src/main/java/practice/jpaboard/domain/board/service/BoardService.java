@@ -34,15 +34,15 @@ public class BoardService {
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
     private final MemberService memberService;
-    private final BoardFileService fileUploadService;
+    private final BoardFileService boardFileService;
 
-    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, LikeRepository likeRepository, CommentRepository commentRepository, MemberService memberService, BoardFileService boardFileUploadService) {
+    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, LikeRepository likeRepository, CommentRepository commentRepository, MemberService memberService, BoardFileService boardFileService) {
         this.memberRepository = memberRepository;
         this.boardRepository = boardRepository;
         this.likeRepository = likeRepository;
         this.commentRepository = commentRepository;
         this.memberService = memberService;
-        this.fileUploadService = boardFileUploadService;
+        this.boardFileService = boardFileService;
     }
 
     @Transactional
@@ -56,7 +56,7 @@ public class BoardService {
             throw new BoardException("게시글 저장을 실패하였습니다.");
         }
 
-        if (fileList != null && fileList.size() > 0) fileUploadService.fileUpload(member, board, fileList); // 파일저장 호출
+        if (fileList != null && fileList.size() > 0) boardFileService.fileUpload(member, board, fileList); // 파일저장 호출
 
         BoardDto result = boardRepository.findBoardDtoByNo(board.getNo()).orElseThrow(
                 () -> new BoardNotFoundException());
@@ -64,12 +64,14 @@ public class BoardService {
         return ResultMessage.of(true, result, HttpStatus.OK);
     }
 
-    public ResultMessage detail(Long no, Pageable pageable) {
+    public ResultMessage detail(Long no) {
         BoardDto result = boardRepository.findBoardDtoByNo(no).orElseThrow(
                 () -> new BoardNotFoundException());
         Member member = memberService.findUserIdFromAuth();
 
         result.setLike(likeRepository.existsByMemberNoAndBoardNo(member.getNo(), no));
+
+        result.setUploadList(boardFileService.uploadDtoList(no));
 
         return ResultMessage.of(true, result, HttpStatus.OK);
     }

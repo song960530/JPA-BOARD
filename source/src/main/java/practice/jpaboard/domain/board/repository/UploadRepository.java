@@ -7,5 +7,5 @@ import practice.jpaboard.domain.board.entity.Upload;
 import java.util.List;
 
 public interface UploadRepository extends JpaRepository<Upload, Long> {
-    List<Upload> findByBoard(Board board);
+    List<Upload> findByBoard_No(Long no);
 }

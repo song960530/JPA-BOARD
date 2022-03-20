@@ -8,6 +8,9 @@ import lombok.NoArgsConstructor;
 import practice.jpaboard.domain.board.entity.Board;
 import practice.jpaboard.domain.member.entity.Member;
 
+import java.util.ArrayList;
+import java.util.List;
+
 @Data
 @NoArgsConstructor
 @AllArgsConstructor
@@ -21,6 +24,7 @@ public class BoardDto {
     private String regDt;
     private String modiDt;
     private Boolean like;
+    private List<UploadDto> uploadList = new ArrayList<>();
 
     public Board toEntity(Member member) {
         return new Board(member, title, content);

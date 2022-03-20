@@ -39,7 +39,10 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
                 .from(comment)
                 .join(comment.member, member)
                 .join(comment.board, board)
-                .where(boardNoEq(no))
+                .where(
+                        boardNoEq(no)
+                        , parentEq(0L)
+                )
                 .orderBy(comment.no.asc())
                 .offset(pageable.getOffset())
                 .limit(pageable.getPageSize())
@@ -53,5 +56,9 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
 
     private BooleanExpression boardNoEq(Long boardNo) {
         return boardNo != null ? comment.board.no.eq(boardNo) : null;
+    }
+
+    private BooleanExpression parentEq(Long parent) {
+        return parent != null ? comment.parent.eq(parent) : null;
     }
 }

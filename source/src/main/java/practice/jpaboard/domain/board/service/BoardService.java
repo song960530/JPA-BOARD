@@ -76,6 +76,7 @@ public class BoardService {
         return ResultMessage.of(true, result, HttpStatus.OK);
     }
 
+    // test주석
     @Transactional
     public ResultMessage like(HttpServletRequest request, Long no) {
         Member member = memberService.findUserIdFromAuth();

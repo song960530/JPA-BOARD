@@ -20,7 +20,6 @@ import practice.jpaboard.domain.board.repository.CommentRepository;
 import practice.jpaboard.domain.board.repository.LikeRepository;
 import practice.jpaboard.domain.member.entity.Member;
 import practice.jpaboard.domain.member.repository.MemberRepository;
-import practice.jpaboard.domain.member.service.MemberService;
 import practice.jpaboard.global.annotation.LoginCheck;
 import practice.jpaboard.global.common.response.ResultMessage;
 
@@ -35,15 +34,13 @@ public class BoardService {
     private final BoardRepository boardRepository;
     private final LikeRepository likeRepository;
     private final CommentRepository commentRepository;
-    private final MemberService memberService;
     private final BoardFileService boardFileService;
 
-    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, LikeRepository likeRepository, CommentRepository commentRepository, MemberService memberService, BoardFileService boardFileService) {
+    public BoardService(MemberRepository memberRepository, BoardRepository boardRepository, LikeRepository likeRepository, CommentRepository commentRepository, BoardFileService boardFileService) {
         this.memberRepository = memberRepository;
         this.boardRepository = boardRepository;
         this.likeRepository = likeRepository;
         this.commentRepository = commentRepository;
-        this.memberService = memberService;
         this.boardFileService = boardFileService;
     }
 

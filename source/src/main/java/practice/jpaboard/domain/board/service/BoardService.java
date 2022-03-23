@@ -4,6 +4,7 @@ import org.springframework.data.domain.Page;
 import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpMethod;
 import org.springframework.http.HttpStatus;
+import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
@@ -50,7 +51,7 @@ public class BoardService {
     @LoginCheck
     public ResultMessage upload(BoardDto boardDTO, List<MultipartFile> fileList) {
         Board board;
-        Member member = memberService.findUserIdFromAuth();
+        Member member = findUserIdFromAuth();
 
         try {
             board = boardRepository.save(boardDTO.toEntity(member));
@@ -69,7 +70,7 @@ public class BoardService {
     public ResultMessage detail(Long no) {
         BoardDto result = boardRepository.findBoardDtoByNo(no).orElseThrow(
                 () -> new BoardNotFoundException());
-        Member member = memberService.findUserIdFromAuth();
+        Member member = findUserIdFromAuth();
         // TODO : 디테일은 로그인 없어도 가능하게 바꾸자
 
         result.setLike(likeRepository.existsByMemberNoAndBoardNo(member.getNo(), no));
@@ -82,7 +83,7 @@ public class BoardService {
     @Transactional
     @LoginCheck
     public ResultMessage like(HttpServletRequest request, Long no) {
-        Member member = memberService.findUserIdFromAuth();
+        Member member = findUserIdFromAuth();
         Board board = boardRepository.findById(no).orElseThrow(
                 () -> new BoardNotFoundException());
 
@@ -103,7 +104,7 @@ public class BoardService {
     @Transactional
     @LoginCheck
     public ResultMessage comment(HttpServletRequest request, Long no, CommentDto commentDto) {
-        Member member = memberService.findUserIdFromAuth();
+        Member member = findUserIdFromAuth();
         Board board = boardRepository.findById(no).orElseThrow(
                 () -> new BoardNotFoundException());
 
@@ -134,5 +135,10 @@ public class BoardService {
         Page<CommentDto> result = commentRepository.findPageBoardDtoByNo(no, pageable);
 
         return ResultMessage.of(true, result, HttpStatus.OK);
+    }
+
+    public Member findUserIdFromAuth() {
+        String userId = SecurityContextHolder.getContext().getAuthentication().getName();
+        return memberRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다"));
     }
 }

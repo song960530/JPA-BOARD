@@ -26,6 +26,13 @@ import practice.jpaboard.global.common.response.ResultMessage;
 import javax.servlet.http.HttpServletRequest;
 import java.util.List;
 
+/**
+ * Service Layer 간의 의존관계를 끊어내기 쉽지 않아
+ * 각각 특성에 맞는 Service를 생성하고
+ * BoardService 에서 각각의 서비스를 주입받아 사용한다.
+ *
+ * => Service Layer간의 의존관계는 BoardService 에서만 허용한다.
+ */
 @Service
 @Transactional(readOnly = true)
 public class BoardService {

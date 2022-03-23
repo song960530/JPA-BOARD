@@ -11,7 +11,7 @@ import org.springframework.web.multipart.MultipartFile;
 import org.springframework.web.servlet.ModelAndView;
 import practice.jpaboard.domain.board.dto.BoardDto;
 import practice.jpaboard.domain.board.dto.CommentDto;
-import practice.jpaboard.domain.board.service.BoardFileService;
+import practice.jpaboard.domain.board.service.BoardCommentService;
 import practice.jpaboard.domain.board.service.BoardService;
 import practice.jpaboard.global.common.response.ResultMessage;
 
@@ -22,7 +22,7 @@ import java.util.List;
 public class BoardController {
 
     private final BoardService boardService;
-    private final BoardFileService boardFileUploadService;
+    private final BoardCommentService commentService;
     private final HttpHeaders header = Headers();
 
     private HttpHeaders Headers() {
@@ -32,9 +32,9 @@ public class BoardController {
         return header;
     }
 
-    public BoardController(BoardService boardService, BoardFileService boardFileUploadService) {
+    public BoardController(BoardService boardService, BoardCommentService commentService) {
         this.boardService = boardService;
-        this.boardFileUploadService = boardFileUploadService;
+        this.commentService = commentService;
     }
 
     @PostMapping("/board")
@@ -57,9 +57,19 @@ public class BoardController {
         return new ResponseEntity<>(boardService.searchComments(no, pageable), header, HttpStatus.OK);
     }
 
-    @RequestMapping(value = "/board/{no}/comment", method = {RequestMethod.POST, RequestMethod.DELETE, RequestMethod.PATCH})
-    public ResponseEntity<ResultMessage> comment(HttpServletRequest request, @PathVariable Long no, @RequestBody CommentDto commentDto) {
-        return new ResponseEntity<>(boardService.comment(request, no, commentDto), header, HttpStatus.OK);
+    @PostMapping("/board/{no}/comment")
+    public ResponseEntity<ResultMessage> saveComment(@PathVariable Long no, @RequestBody CommentDto commentDto) {
+        return new ResponseEntity<>(commentService.saveComment(no, commentDto), header, HttpStatus.OK);
+    }
+
+    @PatchMapping("/board/{no}/comment")
+    public ResponseEntity<ResultMessage> updateComment(@PathVariable Long no, @RequestBody CommentDto commentDto) {
+        return new ResponseEntity<>(commentService.updateComment(commentDto), header, HttpStatus.OK);
+    }
+
+    @DeleteMapping("/board/{no}/comment")
+    public ResponseEntity<ResultMessage> deleteComment(@PathVariable Long no, @RequestBody CommentDto commentDto) {
+        return new ResponseEntity<>(commentService.deleteComment(commentDto), header, HttpStatus.OK);
     }
 
     @GetMapping("/board")

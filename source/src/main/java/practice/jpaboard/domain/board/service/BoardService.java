@@ -20,6 +20,7 @@ import practice.jpaboard.domain.board.repository.LikeRepository;
 import practice.jpaboard.domain.member.entity.Member;
 import practice.jpaboard.domain.member.repository.MemberRepository;
 import practice.jpaboard.domain.member.service.MemberService;
+import practice.jpaboard.global.annotation.LoginCheck;
 import practice.jpaboard.global.common.response.ResultMessage;
 
 import javax.servlet.http.HttpServletRequest;
@@ -46,6 +47,7 @@ public class BoardService {
     }
 
     @Transactional
+    @LoginCheck
     public ResultMessage upload(BoardDto boardDTO, List<MultipartFile> fileList) {
         Board board;
         Member member = memberService.findUserIdFromAuth();
@@ -68,6 +70,7 @@ public class BoardService {
         BoardDto result = boardRepository.findBoardDtoByNo(no).orElseThrow(
                 () -> new BoardNotFoundException());
         Member member = memberService.findUserIdFromAuth();
+        // TODO : 디테일은 로그인 없어도 가능하게 바꾸자
 
         result.setLike(likeRepository.existsByMemberNoAndBoardNo(member.getNo(), no));
 
@@ -77,6 +80,7 @@ public class BoardService {
     }
 
     @Transactional
+    @LoginCheck
     public ResultMessage like(HttpServletRequest request, Long no) {
         Member member = memberService.findUserIdFromAuth();
         Board board = boardRepository.findById(no).orElseThrow(
@@ -97,6 +101,7 @@ public class BoardService {
     }
 
     @Transactional
+    @LoginCheck
     public ResultMessage comment(HttpServletRequest request, Long no, CommentDto commentDto) {
         Member member = memberService.findUserIdFromAuth();
         Board board = boardRepository.findById(no).orElseThrow(

@@ -9,7 +9,24 @@
 <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
 <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
 <script type="text/javascript">
-    var test = function () {
+    var detail = function (no) {
+        $.ajax({
+            url: "/board/"+no,
+            type: "GET",
+            contentType: false,
+            processData: false,
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-AUTH-TOKEN", $('#token').val());
+            },
+            success: function (result) {
+                console.log(result)
+            },
+            error: function () {
+            }
+        })
+    }
+
+    var upload = function () {
         var params = {
             title: $('#title').val()
             , content: $('#content').val()
@@ -29,18 +46,43 @@
             contentType: false,
             processData: false,
             beforeSend: function (xhr) {
-                xhr.setRequestHeader("X-AUTH-TOKEN", "eyJhbGciOiJIUzI1NiJ9.eyJzdWIiOiJ0ZXN0MSIsInJvbGVzIjpbIlJPTEVfVVNFUiJdLCJpYXQiOjE2NDc3NjI3ODIsImV4cCI6MTY0Nzc2NDU4Mn0.rnYIn1vj-yZvvidQ4g7vh5-dE10Scuu9LPp_pA_pYKk");
+                xhr.setRequestHeader("X-AUTH-TOKEN", $('#token').val());
             },
             success: function (result) {
-                console.log(result)
+                console.log(result);
+                detail(result.data.no);
             },
             error: function () {
             }
         })
-    }
+    };
+
+    var login = function () {
+        var data = {
+            userId: 'test1'
+            , password: 'test1'
+        };
+
+        $.ajax({
+            url: "/login",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+            },
+            success: function (result) {
+                console.log(result);
+                $('#token').val(result.data.token);
+                upload();
+            },
+            error: function () {
+            }
+        })
+    };
 
 </script>
 <body>
+<input type="hidden" id="token" value=""/>
 <div style="margin:0 15% 0 15%">
     <div class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
         <h2 class="w3-center">게시글 등록</h2>
@@ -64,7 +106,7 @@
         </div>
 
         <p class="w3-center">
-            <button class="w3-button w3-section w3-blue w3-ripple" onclick="test()"> Send</button>
+            <button class="w3-button w3-section w3-blue w3-ripple" onclick="login()"> Send</button>
         </p>
     </div>
 </div>

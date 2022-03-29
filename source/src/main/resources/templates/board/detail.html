@@ -1,0 +1,102 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Title</title>
+</head>
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<link rel="stylesheet" href="https://www.w3schools.com/w3css/4/w3.css">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/4.7.0/css/font-awesome.min.css">
+<script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+<script type="text/javascript">
+    $(document).ready(function () {
+        login();
+    });
+
+    var detail = function () {
+        $.ajax({
+            url: "/board/" + $('#no').val(),
+            type: "GET",
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-AUTH-TOKEN", $('#token').val());
+            },
+            success: function (result) {
+                console.log(result)
+
+
+                $('#infoSection').text('등록자 : ' + result.data.userId + ' 등록일 : ' + result.data.regDt);
+
+                $('#title').val(result.data.title);
+                $('#content').val(result.data.content);
+
+
+                $.each(result.data.uploadList, function (index, value) {
+                    $('#uploadSection').append('<a href="#">' + value.originName + '</a><br/>')
+                });
+
+            },
+            error: function () {
+            }
+        })
+    };
+
+    var login = function () {
+        var data = {
+            userId: 'test1'
+            , password: 'test1'
+        };
+
+        $.ajax({
+            url: "/login",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+            },
+            success: function (result) {
+                $('#token').val(result.data.token);
+                detail();
+            },
+            error: function () {
+            }
+        })
+    };
+</script>
+<body>
+<input type="hidden" id="token" value=""/>
+<input type="hidden" id="no" th:value="${no}"/>
+<div style="margin:0 15% 0 15%">
+    <div class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
+        <h2 class="w3-center">게시글 상세</h2>
+
+        <div class="w3-row w3-section">
+            <div class="w3-rest" id="infoSection">
+            </div>
+        </div>
+
+        <div class="w3-row w3-section">
+            <div class="w3-rest">
+                제목 : <input class="w3-input w3-border" type="text" placeholder="제목" id="title" disabled/>
+            </div>
+        </div>
+
+        <div class="w3-row w3-section">
+            <div class="w3-rest">
+                내용 : <input class="w3-input w3-border" name="last" type="text" placeholder="내용" id="content" disabled>
+            </div>
+        </div>
+
+        <div class="w3-row w3-section">
+            업로드파일 :
+            <div class="w3-rest" id="uploadSection">
+            </div>
+        </div>
+
+        <!--        <p class="w3-center">
+                    <button class="w3-button w3-section w3-blue w3-ripple" onclick="login()"> Send</button>
+                </p>-->
+    </div>
+</div>
+</body>
+</html>

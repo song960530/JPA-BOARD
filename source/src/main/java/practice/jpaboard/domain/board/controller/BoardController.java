@@ -71,11 +71,4 @@ public class BoardController {
     public ResponseEntity<ResultMessage> deleteComment(@PathVariable Long no, @RequestBody CommentDto commentDto) {
         return new ResponseEntity<>(commentService.deleteComment(commentDto), header, HttpStatus.OK);
     }
-
-    @GetMapping("/board")
-    public ModelAndView index() {
-        ModelAndView mav = new ModelAndView();
-        mav.setViewName("/board/board");
-        return mav;
-    }
 }

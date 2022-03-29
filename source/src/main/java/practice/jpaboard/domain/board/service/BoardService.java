@@ -105,42 +105,6 @@ public class BoardService {
         return ResultMessage.of(true, HttpStatus.OK);
     }
 
-    @Transactional
-    @LoginCheck
-    public ResultMessage comment(HttpServletRequest request, Long no, CommentDto commentDto) {
-        Member member = findUserIdFromAuth();
-        Board board = boardRepository.findById(no).orElseThrow(
-                () -> new BoardNotFoundException());
-
-        try {
-            if (HttpMethod.POST.matches(request.getMethod())) {
-                Comment comment = new Comment(member, board, commentDto.getContent());
-                if (commentDto.getParent() != null) comment.setParent(commentDto.getParent());
-                commentRepository.save(comment);
-            } else if (HttpMethod.PATCH.matches(request.getMethod())) {
-                Comment comment = commentRepository.findById(commentDto.getCommentNo()).orElseThrow(
-                        () -> new BoardException("댓글 조회에 실패했습니다."));
-                comment.setContent(commentDto.getContent());
-            } else {
-                Comment comment = commentRepository.findById(commentDto.getCommentNo()).orElseThrow(
-                        () -> new BoardException("댓글 조회에 실패했습니다."));
-                comment.setDeleteyn("Y");
-            }
-        } catch (Exception e) {
-            throw new BoardException("댓글 변경을 실패했습니다.");
-        }
-
-        return ResultMessage.of(true, HttpStatus.OK);
-    }
-
-    public ResultMessage searchComments(Long no, Pageable pageable) {
-        if (no == null) throw new IllegalArgumentException("댓글 조회에 실패했습니다.");
-
-        Page<CommentDto> result = commentRepository.findPageBoardDtoByNo(no, pageable);
-
-        return ResultMessage.of(true, result, HttpStatus.OK);
-    }
-
     public Member findUserIdFromAuth() {
         String userId = SecurityContextHolder.getContext().getAuthentication().getName();
         return memberRepository.findByUserId(userId).orElseThrow(() -> new IllegalArgumentException("가입되지 않은 ID입니다"));

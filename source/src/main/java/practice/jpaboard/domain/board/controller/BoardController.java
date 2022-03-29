@@ -54,7 +54,7 @@ public class BoardController {
 
     @GetMapping("/board/{no}/comment")
     public ResponseEntity<ResultMessage> saerchComments(@PathVariable Long no, @PageableDefault(page = 0, size = 10) Pageable pageable) {
-        return new ResponseEntity<>(boardService.searchComments(no, pageable), header, HttpStatus.OK);
+        return new ResponseEntity<>(commentService.searchComments(no, pageable), header, HttpStatus.OK);
     }
 
     @PostMapping("/board/{no}/comment")

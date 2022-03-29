@@ -2,6 +2,8 @@ package practice.jpaboard.domain.board.service;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.data.domain.Page;
+import org.springframework.data.domain.Pageable;
 import org.springframework.http.HttpStatus;
 import org.springframework.security.core.context.SecurityContextHolder;
 import org.springframework.stereotype.Service;
@@ -81,6 +83,14 @@ public class BoardCommentService {
         }
 
         return ResultMessage.of(true, HttpStatus.OK);
+    }
+
+    public ResultMessage searchComments(Long no, Pageable pageable) {
+        if (no == null) throw new IllegalArgumentException("댓글 조회에 실패했습니다.");
+
+        Page<CommentDto> result = commentRepository.findPageBoardDtoByNo(no, pageable);
+
+        return ResultMessage.of(true, result, HttpStatus.OK);
     }
 
     public Member findUserIdFromAuth() {

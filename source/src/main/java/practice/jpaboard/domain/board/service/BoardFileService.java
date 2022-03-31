@@ -37,7 +37,6 @@ public class BoardFileService {
             Upload upload = null;
             File filePath = new File(FILE_PATH);
             File saveFile = new File(MD5Generator(file.getOriginalFilename())); // 파일이름 + UUID로 MD5 생성
-//            String ext = FilenameUtils.getExtension(file.getOriginalFilename());
 
             if (!filePath.exists()) {
                 filePath.mkdirs(); // 디렉토리가 없으면 생성

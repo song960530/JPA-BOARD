@@ -47,6 +47,11 @@ public class BoardController {
         return new ResponseEntity<>(boardService.detail(no), header, HttpStatus.OK);
     }
 
+//    @GetMapping("/board/{no}/download/{encrtpyName}")
+//    public ResponseEntity<ResultMessage> detail(@PathVariable Long no, @PathVariable String encrtpyName) {
+//        return new ResponseEntity<>(boardService.detail(no), header, HttpStatus.OK);
+//    }
+
     @RequestMapping(value = "/board/{no}/like", method = {RequestMethod.POST, RequestMethod.DELETE})
     public ResponseEntity<ResultMessage> like(HttpServletRequest request, @PathVariable Long no) {
         return new ResponseEntity<>(boardService.like(request, no), header, HttpStatus.OK);

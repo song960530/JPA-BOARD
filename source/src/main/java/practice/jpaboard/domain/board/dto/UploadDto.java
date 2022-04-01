@@ -13,9 +13,11 @@ import practice.jpaboard.domain.board.entity.Upload;
 public class UploadDto {
     private Long no;
     private String originName;
+    private String encryptName;
 
     public UploadDto(Upload upload) {
         this.no = upload.getNo();
         this.originName = upload.getOriginName();
+        this.encryptName = upload.getEncryptName();
     }
 }

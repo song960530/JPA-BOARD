@@ -35,6 +35,49 @@
                     $('#uploadSection').append('<a href="#">' + value.originName + '</a><br/>')
                 });
 
+                searchComment();
+
+            },
+            error: function () {
+            }
+        })
+    };
+
+    var searchComment = function () {
+        $.ajax({
+            url: "/board/" + $('#no').val() + "/comment",
+            type: "GET",
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-AUTH-TOKEN", $('#token').val());
+            },
+            success: function (result) {
+                $('#cmtSection').text("");
+
+                $.each(result.data.content, function (index, value) {
+                    $('#cmtSection').append('ㄴ' + value.content + '<a href="javascript:#">수정</a><br/>')
+                });
+            },
+            error: function () {
+            }
+        })
+    };
+
+    var insertComment = function () {
+        var data = {
+            content: $('#cmtInput').val()
+        }
+
+        $.ajax({
+            url: "/board/" + $('#no').val() + "/comment",
+            type: "POST",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-AUTH-TOKEN", $('#token').val());
+            },
+            success: function (result) {
+                searchComment();
             },
             error: function () {
             }
@@ -96,6 +139,24 @@
         <!--        <p class="w3-center">
                     <button class="w3-button w3-section w3-blue w3-ripple" onclick="login()"> Send</button>
                 </p>-->
+    </div>
+
+    <div class="w3-container w3-card-4 w3-light-grey w3-text-blue w3-margin">
+        <h2 class="w3-center">댓글</h2>
+
+        <div class="w3-row w3-section">
+            <div class="w3-rest">
+                <input class="w3-input w3-border" type="text" style="display:inline; width:90%" placeholder="제목"
+                       id="cmtInput"/>
+                <button class="w3-button w3-section w3-blue w3-ripple" onclick="insertComment()"> 등록</button>
+            </div>
+        </div>
+
+        <div class="w3-row w3-section">
+            <div class="w3-rest" id="cmtSection">
+            </div>
+        </div>
+
     </div>
 </div>
 </body>

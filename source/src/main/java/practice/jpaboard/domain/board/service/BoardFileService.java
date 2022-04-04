@@ -1,19 +1,25 @@
 package practice.jpaboard.domain.board.service;
 
+import org.apache.commons.io.FileUtils;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.http.HttpStatus;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.web.multipart.MultipartFile;
 import practice.jpaboard.domain.board.dto.UploadDto;
 import practice.jpaboard.domain.board.entity.Board;
 import practice.jpaboard.domain.board.entity.Upload;
+import practice.jpaboard.domain.board.exception.BoardException;
 import practice.jpaboard.domain.board.exception.FileUploadFailException;
 import practice.jpaboard.domain.board.repository.UploadRepository;
 import practice.jpaboard.domain.member.entity.Member;
+import practice.jpaboard.global.common.response.ResultMessage;
 
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.IOException;
 import java.io.UnsupportedEncodingException;
+import java.net.URLEncoder;
 import java.security.MessageDigest;
 import java.security.NoSuchAlgorithmException;
 import java.util.List;
@@ -53,6 +59,27 @@ public class BoardFileService {
         });
     }
 
+    public ResultMessage fileDownload(Long no, String encryptName, HttpServletResponse response) {
+        byte[] bytes;
+        Upload upload = uploadRepository.findByBoard_NoAndEncryptName(no, encryptName).orElseThrow(
+                () -> new BoardException("검색된 파일이 없습니다."));
+
+        File file = new File(FILE_PATH + File.separator + upload.getEncryptName());
+
+        try {
+            response.setHeader("Content-Disposition", "attachment; fileName=" + URLEncoder.encode(upload.getOriginName(), "UTF-8"));
+
+            bytes = FileUtils.readFileToByteArray(file);
+            response.getOutputStream().write(bytes);
+            response.getOutputStream().flush();
+            response.getOutputStream().close();
+        } catch (IOException e) {
+            e.printStackTrace();
+        }
+
+        return ResultMessage.of(true, HttpStatus.OK);
+    }
+
     public List<UploadDto> uploadDtoList(Long no) {
         List<Upload> uploadList = uploadRepository.findByBoard_No(no);
 
@@ -85,4 +112,5 @@ public class BoardFileService {
         }
         return hexMD5hash.toString();
     }
+
 }

@@ -32,7 +32,8 @@
 
 
                 $.each(result.data.uploadList, function (index, value) {
-                    $('#uploadSection').append('<a href="#">' + value.originName + '</a><br/>')
+                    $('#uploadSection').append('<a href="http://localhost:8080/board/' + $('#no').val() + '/download?encryptName=' + value.encryptName + '">' + value.originName + '<br/>'
+                    )
                 });
 
                 searchComment();

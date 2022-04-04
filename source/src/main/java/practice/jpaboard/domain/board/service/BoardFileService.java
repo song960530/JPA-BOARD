@@ -10,6 +10,7 @@ import practice.jpaboard.domain.board.dto.UploadDto;
 import practice.jpaboard.domain.board.entity.Board;
 import practice.jpaboard.domain.board.entity.Upload;
 import practice.jpaboard.domain.board.exception.BoardException;
+import practice.jpaboard.domain.board.exception.FileDownloadException;
 import practice.jpaboard.domain.board.exception.FileUploadFailException;
 import practice.jpaboard.domain.board.repository.UploadRepository;
 import practice.jpaboard.domain.member.entity.Member;
@@ -74,7 +75,7 @@ public class BoardFileService {
             response.getOutputStream().flush();
             response.getOutputStream().close();
         } catch (IOException e) {
-            e.printStackTrace();
+            throw new FileDownloadException();
         }
 
         return ResultMessage.of(true, HttpStatus.OK);

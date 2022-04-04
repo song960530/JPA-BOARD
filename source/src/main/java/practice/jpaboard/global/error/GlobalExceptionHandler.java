@@ -7,6 +7,7 @@ import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.ExceptionHandler;
 import org.springframework.web.bind.annotation.RestControllerAdvice;
+import practice.jpaboard.domain.board.exception.FileDownloadException;
 import practice.jpaboard.domain.board.exception.FileUploadFailException;
 import practice.jpaboard.global.common.response.ResultMessage;
 import practice.jpaboard.domain.board.exception.BoardException;
@@ -58,6 +59,16 @@ public class GlobalExceptionHandler {
 
     @ExceptionHandler(FileUploadFailException.class)
     public ResponseEntity<ResultMessage> fileUploadException(FileUploadFailException e) {
+        HttpHeaders header = new HttpHeaders();
+        header.setContentType(MediaType.APPLICATION_JSON);
+
+        log.error(e.getMessage());
+
+        return new ResponseEntity<>(ResultMessage.of(false, HttpStatus.INTERNAL_SERVER_ERROR, e.getMessage()), header, HttpStatus.OK);
+    }
+
+    @ExceptionHandler(FileDownloadException.class)
+    public ResponseEntity<ResultMessage> fileDownloadException(FileDownloadException e) {
         HttpHeaders header = new HttpHeaders();
         header.setContentType(MediaType.APPLICATION_JSON);
 

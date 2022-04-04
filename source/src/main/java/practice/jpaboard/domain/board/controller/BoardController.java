@@ -12,10 +12,12 @@ import org.springframework.web.servlet.ModelAndView;
 import practice.jpaboard.domain.board.dto.BoardDto;
 import practice.jpaboard.domain.board.dto.CommentDto;
 import practice.jpaboard.domain.board.service.BoardCommentService;
+import practice.jpaboard.domain.board.service.BoardFileService;
 import practice.jpaboard.domain.board.service.BoardService;
 import practice.jpaboard.global.common.response.ResultMessage;
 
 import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.util.List;
 
 @RestController
@@ -23,6 +25,7 @@ public class BoardController {
 
     private final BoardService boardService;
     private final BoardCommentService commentService;
+    private final BoardFileService fileService;
     private final HttpHeaders header = Headers();
 
     private HttpHeaders Headers() {
@@ -32,9 +35,10 @@ public class BoardController {
         return header;
     }
 
-    public BoardController(BoardService boardService, BoardCommentService commentService) {
+    public BoardController(BoardService boardService, BoardCommentService commentService, BoardFileService fileService) {
         this.boardService = boardService;
         this.commentService = commentService;
+        this.fileService = fileService;
     }
 
     @PostMapping("/board")
@@ -47,10 +51,10 @@ public class BoardController {
         return new ResponseEntity<>(boardService.detail(no), header, HttpStatus.OK);
     }
 
-//    @GetMapping("/board/{no}/download/{encrtpyName}")
-//    public ResponseEntity<ResultMessage> detail(@PathVariable Long no, @PathVariable String encrtpyName) {
-//        return new ResponseEntity<>(boardService.detail(no), header, HttpStatus.OK);
-//    }
+    @GetMapping("/board/{no}/download")
+    public ResponseEntity<ResultMessage> download(@PathVariable Long no, @RequestParam String encryptName, HttpServletResponse response) {
+        return new ResponseEntity<>(fileService.fileDownload(no, encryptName, response), header, HttpStatus.OK);
+    }
 
     @RequestMapping(value = "/board/{no}/like", method = {RequestMethod.POST, RequestMethod.DELETE})
     public ResponseEntity<ResultMessage> like(HttpServletRequest request, @PathVariable Long no) {

@@ -13,6 +13,10 @@
         login();
     });
 
+    var updateComment = function () {
+
+    }
+
     var detail = function () {
         $.ajax({
             url: "/board/" + $('#no').val(),
@@ -53,10 +57,16 @@
                 xhr.setRequestHeader("X-AUTH-TOKEN", $('#token').val());
             },
             success: function (result) {
+                console.log(result);
                 $('#cmtSection').text("");
 
                 $.each(result.data.content, function (index, value) {
-                    $('#cmtSection').append('ㄴ' + value.content + '<a href="javascript:#">수정</a><br/>')
+                    $('#cmtSection').append(
+                        '<div> \
+                            <input class="w3-input w3-border" type="text" style="display:inline; width:50%" value="' + value.content + '" readonly = true/>\
+                            <button class="w3-button w3-section w3-blue w3-ripple" onClick=""> 수정 </button> \
+                        </div>'
+                    );
                 });
             },
             error: function () {

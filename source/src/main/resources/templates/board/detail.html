@@ -13,13 +13,32 @@
         login();
     });
 
+    var deleteComment = function (param) {
+        var data = {
+            commentNo: $(param).parent().find('input[name="commentNo"]').val()
+        };
+
+        $.ajax({
+            url: "/board/" + $('#no').val() + "/comment",
+            type: "DELETE",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-AUTH-TOKEN", $('#token').val());
+            },
+            success: function (result) {
+                searchComment();
+            },
+            error: function () {
+            }
+        });
+    }
+
     var updateComment = function (param) {
         var data = {
             commentNo: $(param).parent().find('input[name="commentNo"]').val()
             , content: $(param).parent().find('input[name="commentContent"]').val()
         };
-
-        console.log(data);
 
         $.ajax({
             url: "/board/" + $('#no').val() + "/comment",
@@ -85,7 +104,8 @@
                         '<div> \
                             <input type="hidden" name="commentNo" value='+value.commentNo+'>\
                             <input class="w3-input w3-border" type="text" name="commentContent" style="display:inline; width:50%" value="' + value.content + '">\
-                            <button class="w3-button w3-section w3-blue w3-ripple" onClick="updateComment(this)"> 수정 </button> \
+                            <button class="w3-button w3-section w3-blue w3-ripple" onClick="updateComment(this)"> 수정 </button>\
+                            <button class="w3-button w3-section w3-blue w3-ripple" onClick="deleteComment(this)"> 삭제 </button> \
                         </div>'
                     );
                 });

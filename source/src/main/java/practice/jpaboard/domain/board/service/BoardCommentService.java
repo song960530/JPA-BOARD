@@ -77,7 +77,7 @@ public class BoardCommentService {
 
             if (!comment.getMember().getUserId().equals(member.getUserId())) throw new Exception();
 
-            comment.setContent(commentDto.getContent());
+            comment.setDeleteyn("Y");
         } catch (Exception e) {
             throw new BoardException("댓글 삭제를 실패했습니다.");
         }

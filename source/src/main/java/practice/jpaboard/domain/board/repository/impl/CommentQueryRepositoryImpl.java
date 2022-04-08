@@ -42,6 +42,7 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
                 .where(
                         boardNoEq(no)
                         , parentEq(0L)
+                        , deleteYnEq("N")
                 )
                 .orderBy(comment.no.asc())
                 .offset(pageable.getOffset())
@@ -60,5 +61,9 @@ public class CommentQueryRepositoryImpl implements CommentQueryRepository {
 
     private BooleanExpression parentEq(Long parent) {
         return parent != null ? comment.parent.eq(parent) : null;
+    }
+
+    private BooleanExpression deleteYnEq(String yn) {
+        return yn != null ? comment.deleteyn.eq(yn) : null;
     }
 }

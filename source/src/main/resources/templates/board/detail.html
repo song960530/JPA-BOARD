@@ -13,8 +13,28 @@
         login();
     });
 
-    var updateComment = function () {
+    var updateComment = function (param) {
+        var data = {
+            commentNo: $(param).parent().find('input[name="commentNo"]').val()
+            , content: $(param).parent().find('input[name="commentContent"]').val()
+        };
 
+        console.log(data);
+
+        $.ajax({
+            url: "/board/" + $('#no').val() + "/comment",
+            type: "PATCH",
+            data: JSON.stringify(data),
+            contentType: 'application/json',
+            beforeSend: function (xhr) {
+                xhr.setRequestHeader("X-AUTH-TOKEN", $('#token').val());
+            },
+            success: function (result) {
+                searchComment();
+            },
+            error: function () {
+            }
+        });
     }
 
     var detail = function () {
@@ -63,8 +83,9 @@
                 $.each(result.data.content, function (index, value) {
                     $('#cmtSection').append(
                         '<div> \
-                            <input class="w3-input w3-border" type="text" style="display:inline; width:50%" value="' + value.content + '" readonly = true/>\
-                            <button class="w3-button w3-section w3-blue w3-ripple" onClick=""> 수정 </button> \
+                            <input type="hidden" name="commentNo" value='+value.commentNo+'>\
+                            <input class="w3-input w3-border" type="text" name="commentContent" style="display:inline; width:50%" value="' + value.content + '">\
+                            <button class="w3-button w3-section w3-blue w3-ripple" onClick="updateComment(this)"> 수정 </button> \
                         </div>'
                     );
                 });

@@ -70,7 +70,7 @@ sudo vi /etc/sudoers
 
 
 
-DB 설치
+DB 설치 (버전에 따라 다르게 설정)
  docker search oracle11gr2
  docker pull imanager/oracle11gr2
  docker run --name oracle -dp 1521:1521 imanager/oracle11gr2
